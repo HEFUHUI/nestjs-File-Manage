@@ -1,0 +1,38 @@
+{
+    "images": [],
+    "userinfo": [{
+        "_id": "5d762bcd531b361327e4b28b",
+        "online": false,
+        "complete": true,
+        "gender": "男",
+        "tie": "计算机系",
+        "insurance": "是",
+        "member": "群众",
+        "cover": [],
+        "nickName": "无名氏",
+        "email": "example@qq.com",
+        "name": "张三",
+        "createdAt": "2019-09-09T10:39:09.387Z",
+        "updatedAt": "2020-01-26T14:55:44.067Z",
+        "socketid": "",
+        "class": "1601",
+        "birthday": "2019-9-9",
+        "dormitory": "389",
+        "phone": "10086",
+        "motto": "不忘初衷，始乱不弃",
+        "avatar": [{
+            "_id": "5d95ec008980306ea69613ed",
+            "createdAt": "2019-10-03T15:16:24.456Z",
+            "type": "image/jpeg",
+            "updatedAt": "2019-10-10T01:48:13.646Z",
+            "uri": "hefuhui-1258205592.cos.ap-guangzhou.myqcloud.com/node/7e063e9e57699b7bf72ddebc660767f7",
+            "user": "5d95ec008980306ea69613ed"
+        }],
+        "password": [{
+            "_id": "5d762be68fa74aa6ca156b22",
+            "user": "5d762bcd531b361327e4b28b",
+            "__v": 0,
+            "password": "$2b$10$enuXwyomlViPmQzQUZCntO.sJEoSbNjOCIsPAZkFGUSF/3zTIL9NG"
+        }]
+    }]
+}

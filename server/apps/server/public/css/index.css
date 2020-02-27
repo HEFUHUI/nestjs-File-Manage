@@ -1,0 +1,14 @@
+@font-face {
+    font-family: "Fira Code Medium";
+    src: url("../fonts/FiraCode-Medium.ttf");
+}
+
+*{
+    font-family: "Fira Code Medium", monospace;
+}
+
+.bg{
+    background:linear-gradient(#d3d9dfff,#d3d9df77,#00000000),url("../images/wallpaper03_1920_wallpaper.jpg");
+    -webkit-background-size:cover;
+    background-size:cover;
+}

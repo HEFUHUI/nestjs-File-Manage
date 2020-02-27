@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="stylesheet" href="/static/css/libs/bootstrap.css">
+    <link rel="stylesheet" href="/static/css/index.css">
+
+    <script src="/static/js/libs/jquery.js"></script>
+    <script src="/static/js/libs/bootstrap.js"></script>
+    <script src="/static/js/index.js"></script>
+
+    <title>Jiwangxh</title>
+</head>
+<body>
+<div class="container-fluid <%= state==='home' ? 'bg' : ''%>">
+    <div class="row p-2">
+        <div class="col-2">
+            <a class="navbar-brand" href="#">
+                <img src="https://hefuhui-1258205592.cos.ap-guangzhou.myqcloud.com/node/3225a568d6b74f82488573af4ede0e6d" height="40" alt="logo">
+            </a>
+        </div>
+        <div class="col-10">
+            <ul class="nav nav-pills justify-content-end">
+                <li class="nav-item active">
+                    <a class="nav-link" href="/">首页 <span class="sr-only">(current)</span></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">文件下载</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">社团</a>
+                </li>
+                <li class="nav-item">
+                    <a href="/login" class="nav-link">登录/注册</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <div class="main d-flex flex-column justify-content-around align-items-center">

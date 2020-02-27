@@ -1,0 +1,57 @@
+{
+  "collection": "@nestjs/schematics",
+  "sourceRoot": "apps/server/src",
+  "projects": {
+    "db": {
+      "type": "library",
+      "root": "libs/db",
+      "entryFile": "index",
+      "sourceRoot": "libs/db/src",
+      "compilerOptions": {
+        "tsConfigPath": "libs/db/tsconfig.lib.json"
+      }
+    },
+    "server": {
+      "type": "application",
+      "root": "apps/server",
+      "entryFile": "main",
+      "sourceRoot": "apps/server/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/server/tsconfig.app.json"
+      }
+    },
+    "admin": {
+      "type": "application",
+      "root": "apps/admin",
+      "entryFile": "main",
+      "sourceRoot": "apps/admin/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/admin/tsconfig.app.json"
+      }
+    },
+    "major": {
+      "type": "library",
+      "root": "libs/major",
+      "entryFile": "index",
+      "sourceRoot": "libs/major/src",
+      "compilerOptions": {
+        "tsConfigPath": "libs/major/tsconfig.lib.json"
+      }
+    },
+    "auth": {
+      "type": "library",
+      "root": "libs/auth",
+      "entryFile": "index",
+      "sourceRoot": "libs/auth/src",
+      "compilerOptions": {
+        "tsConfigPath": "libs/auth/tsconfig.lib.json"
+      }
+    }
+  },
+  "compilerOptions": {
+    "webpack": true,
+    "tsConfigPath": "apps/server/tsconfig.app.json"
+  },
+  "monorepo": true,
+  "root": "apps/server"
+}

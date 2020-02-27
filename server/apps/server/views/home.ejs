@@ -1,0 +1,22 @@
+<%-include('./compoments/header.ejs',{user,state})-%>
+<div>
+           <h1 >hello 计算机网络协会</h1>
+           <form action="#" class="form-inline">
+               <div class="form-group">
+                   <label for="exampleFormControlInput1">
+                       <select class="form-control">
+                           <option>搜索文件</option>
+                           <option>搜索成员</option>
+                           <option>搜索图片</option>
+                       </select>
+                   </label>
+                   <input type="email" class="form-control" id="exampleFormControlInput1" placeholder="输入关键字">
+                   <button class="btn btn-primary">搜索</button>
+               </div>
+           </form>
+       </div>
+        <div>
+            <h1 class="text-warning">
+            </h1>
+        </div>
+<%-include("./compoments/footer.ejs")-%>
