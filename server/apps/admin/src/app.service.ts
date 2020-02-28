@@ -59,7 +59,7 @@ export class AppService {
           images.createdAt = u.createdAt;
           images.alias = u._id;
           images.url = u.uri;
-          images.author = await this.db.manager.findOne(userinfo, { where: { name: u.author[0].name } })
+          images.author = await this.db.manager.findOne(account, { where: { email: u.author[0].email } })
           await this.db.manager.save(images)
           resolve();
         }

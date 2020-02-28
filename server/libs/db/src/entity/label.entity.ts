@@ -1,4 +1,4 @@
-import { Entity, PrimaryGeneratedColumn, Column, JoinColumn, OneToOne, ManyToOne, OneToMany, ManyToMany } from "typeorm";
+import { Entity, PrimaryGeneratedColumn, Column, JoinColumn, OneToOne, ManyToOne, OneToMany, ManyToMany, CreateDateColumn, UpdateDateColumn, JoinTable } from "typeorm";
 import { ApiProperty } from "@nestjs/swagger";
 import { files } from "./files.entity";
 
@@ -11,8 +11,7 @@ export class label{
     @Column()
     name:string
 
-    @ManyToMany(t=>files,t=>t.labels)
-    @JoinColumn()
+    @ManyToMany(t=>files,t=>t.label,{cascade:true})
     file:files[]
 
     @Column({onUpdate:"CURRENT_TIMESTAMP",default:()=>"CURRENT_TIMESTAMP",name:"update_at",type:'timestamp'})

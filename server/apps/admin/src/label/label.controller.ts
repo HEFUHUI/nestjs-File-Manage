@@ -5,7 +5,7 @@ import { label } from '@libs/db/entity/label.entity';
 import { LabelService } from './label.service';
 import { AuthGuard } from '@nestjs/passport';
 
-@UseGuards(AuthGuard("local"))
+@UseGuards(AuthGuard("jwt"))
 @ApiBearerAuth()
 @Crud({
     model: {
@@ -19,14 +19,14 @@ import { AuthGuard } from '@nestjs/passport';
     },
     query: {
         join: {
-            files: {
-                eager: true
+            file:{
+                eager:true
             }
         }
     }
 })
-@ApiTags("文件标签管理")
-@Controller('label')
+@ApiTags("文件标签管理")    
+@Controller('labels')
 export class LabelController {
-    constructor(public readonly service:LabelService){}
+    constructor(public readonly service: LabelService) { }
 }

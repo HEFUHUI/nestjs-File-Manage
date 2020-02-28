@@ -20,13 +20,13 @@ import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
     },
     query: {
         join: {
-            labels: {
+            label: {
                 eager: true
             },
             author: {
                 eager: true
             },
-            desc_images:{
+            desc_image:{
                 eager:true
             }
         }
@@ -39,7 +39,7 @@ export class FilesController {
     @Get("options")
     async options() {
         return {
-            title:"账户管理",
+            title:"文件管理",
             pagination:true,
             columns: {
                 name:{

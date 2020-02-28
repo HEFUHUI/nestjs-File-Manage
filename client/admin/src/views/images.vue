@@ -16,12 +16,12 @@
     <el-row :gutter="20">
       <el-col :span="2" v-for="(item,index) in images" :key="index" class="img-item" style="margin:10px 5px">
         <el-popover placement="top-start" title="属性" width="300" trigger="hover">
-          <el-image class="image" slot="reference" :preview-src-list="srcList" :src="/^[http|https]:\/\//.test(item.url) ? item.url : 'http://'+item.url" fit="contain"></el-image>图片地址:
+          <el-image class="image" slot="reference" :preview-src-list="srcList" :src="/^[http|https]:\/\//.test(item.url) ? item.url : 'http://'+item.url" fit="cover"></el-image>图片地址:
           <a :href="/^[http|https]:\/\//.test(item.url) ? item.url : 'http://'+item.url" target="_bink">{{item.url}}</a>
           <div style="text-align: left; margin: 0">
             <p>图片别名:{{item.alias||"无"}}</p>
             <p>上传时间:{{item.createdAt|date}}</p>
-            <p>上传:{{item.author ? item.author.name :"无"}}</p>
+            <p>上传:{{item.author ? item.author.nickName+"-"+item.author.email :"无"}}</p>
           </div>
           <el-button  size="mini" type="danger" @click="del(item.id)">删除</el-button>
           <el-popover placement="bottom" title="输入别名" width="200" trigger="click">

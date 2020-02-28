@@ -13,7 +13,7 @@ export class userinfo{
     @Column()
     name:string
 
-
+    @ApiProperty({type:"enum",enum:["男","女"]})
     @Column({type:"enum",enum:["男","女"],default:"男"})
     gender:string
 

@@ -1,12 +1,15 @@
 <template>
-  <el-dialog title="文件上传" :visible.sync="visible" width="40%">
-    <el-switch v-model="value1" active-text="输入URL" inactive-text="上传"></el-switch>
-    <el-row :gutter="20" v-if="!value1" style="text-align:center">
+    <span>
+    <el-dialog title="文件上传" :destroy-on-close="true" :show-close="false" :close-on-click-modal="false" :append-to-body="true"	:visible.sync="visible" width="40%">
+    <el-switch v-model="mode" active-text="输入URL" inactive-text="上传"></el-switch>
+    <el-row :gutter="20" v-if="!mode" style="text-align:center">
       <el-col :span="24">
         <el-upload
           style="margin:20px"
           class="upload-demo"
           ref="upload"
+          drag
+          :headers="{'Authorization':$store.getters.token}"
           :on-success="success"
           :on-error="error"
           :auto-upload="false"
@@ -25,11 +28,11 @@
         </el-upload>
       </el-col>
     </el-row>
-    <el-row v-if="value1">
+    <el-row v-if="mode">
       <el-col :span="24" style="padding:10px;padding-top:20px">
         <el-form :inline="true">
           <el-form-item label="手动输入URL">
-            <el-input v-model="url">
+            <el-input v-model="value">
               <template slot="prepend">Http://</template>
             </el-input>
           </el-form-item>
@@ -38,18 +41,19 @@
       </el-col>
     </el-row>
     <span slot="footer">
-      <el-button @click="$emit('update:visible', false);">取 消</el-button>
+      <el-button @click="$emit('update:visible',false)">取 消</el-button>
       <el-button type="primary" @click="enter">确 定</el-button>
     </span>
   </el-dialog>
+  <slot name="active"></slot>
+  </span>
 </template>
 <script>
 export default {
-  props: ["visible", "api"],
+  props: ["api","value","visible"],
   data() {
     return {
-      url: "",
-      value1: false
+      mode: false,
     };
   },
   methods: {
@@ -57,15 +61,34 @@ export default {
       this.$message({ type: "error", message: err.message });
     },
     success(response) {
-      this.$emit("on-success", response.url);
+      this.$message({type:'success',message:"上传成功"})
+      if(this.api == "upload-local"){
+        this.$store.commit("upload",response)
+      }
+      this.$emit("success",response)
+      this.$emit("input",response.url);
     },
     async enter() {
-      if (this.url !== "") {
-        this.$emit("on-success", this.url);
+      if (this.mode) {
+        this.$message({type:'success',message:"上传成功"})
+        let url = this.value.split("\\")
+        this.$store.commit("upload",{
+          size:0,
+          fieldname:"null",
+          originalname:url[url.length-1],
+          mimetype:"null"
+        })
+        this.$emit("input", this.value);
+        this.$emit("success",{url:this.value});
+      }else{
+        await this.$refs.upload.submit();
       }
-     await this.$refs.upload.submit();
       this.$emit('update:visible', false)
     }
+  },
+  created(){
+    console.log(this.value);
+    this.$emit("input", '');
   }
 };
 </script>

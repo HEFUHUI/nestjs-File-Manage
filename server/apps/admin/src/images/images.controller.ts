@@ -22,7 +22,7 @@ import { AuthGuard } from '@nestjs/passport';
         join:{
             author:{
                 alias:"author",
-                allow:["name"],
+                allow:["nickName","id","email"],
                 eager:true
             }
         }

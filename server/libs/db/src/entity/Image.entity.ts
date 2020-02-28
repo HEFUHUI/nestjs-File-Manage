@@ -2,6 +2,7 @@ import { Entity, PrimaryGeneratedColumn, Column, JoinColumn, OneToOne, OneToMany
 import { userinfo } from "./users.entity";
 import { ApiProperty } from "@nestjs/swagger";
 import { files } from "./files.entity";
+import { account } from "./Account.entity";
 
 @Entity()
 export class image{
@@ -18,12 +19,11 @@ export class image{
     @Column({name:"alias",nullable:true})
     alias:string
 
-    @ManyToOne(t=>userinfo,t=>t.id,{nullable:true})
-    @JoinColumn({name:"user_id"})
-    author:userinfo
+    @ManyToOne(t=>account,t=>t.id,{nullable:true})
+    @JoinColumn({name:"account_id"})
+    author:account
 
-    @ManyToMany(t=>files,t=>t.desc_images)
-    @JoinColumn()
+    @ManyToMany(t=>files,t=>t.desc_image,{cascade:true})
     file:files[]
 
     @Column({onUpdate:"CURRENT_TIMESTAMP",default:()=>"CURRENT_TIMESTAMP",name:"update_at",type:'timestamp'})

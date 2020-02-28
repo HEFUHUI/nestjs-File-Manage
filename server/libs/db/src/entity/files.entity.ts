@@ -1,8 +1,9 @@
-import { Entity, PrimaryGeneratedColumn, Column, JoinColumn, OneToOne, OneToMany, ManyToOne, ManyToMany } from "typeorm";
+import { Entity, PrimaryGeneratedColumn, Column, JoinColumn, OneToOne, OneToMany, ManyToOne, ManyToMany, JoinTable } from "typeorm";
 import { userinfo } from "./users.entity";
 import { ApiProperty } from "@nestjs/swagger";
 import { image } from "./Image.entity";
 import { label } from "./label.entity";
+import { account } from "./Account.entity";
 
 @Entity()
 export class files{
@@ -26,16 +27,33 @@ export class files{
     description:string
 
     @ManyToMany(t=>image,t=>t.file)
-    @JoinColumn()
-    desc_images:image[]
+    @JoinTable({
+        name:"file_image",
+        joinColumns:[
+            {name:"file_id"}
+        ],
+        inverseJoinColumns:[
+            {name:'image_id'}
+        ]
+    })
+    desc_image:image[]
 
-    @ManyToOne(t=>userinfo,t=>t.id,{nullable:false})
+    @ManyToOne(t=>account,t=>t.id,{nullable:false})
     @JoinColumn({name:"user_id"})
-    author:userinfo
+    author:account
 
     @ManyToMany(t=>label,t=>t.file)
-    @JoinColumn()
-    labels:label[]
+    @JoinTable({
+        name:"file_label",
+        joinColumns:[
+            {name:"file_id"}
+        ],
+        inverseJoinColumns:[
+            {name:'label_id'}
+        ]
+    })
+    label:label[]
+
 
     @Column({onUpdate:"CURRENT_TIMESTAMP",default:()=>"CURRENT_TIMESTAMP",name:"update_at",type:'timestamp'})
     updateAt:Date

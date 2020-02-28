@@ -14,15 +14,23 @@
               管理员登录
             </h1>
           </el-form-item>
-          <el-form-item label="邮箱" prop="email" :rules="[
+          <el-form-item
+            label="邮箱"
+            prop="email"
+            :rules="[
           {required:true,message:'用户名必须填写'},
           {type:'email',message:'注意邮箱的格式'},
-            ]">
+            ]"
+          >
             <el-input v-model="logiForm.email" placeholder="输入管理员邮箱"></el-input>
           </el-form-item>
-          <el-form-item label="密码" prop="password" :rules="[{
+          <el-form-item
+            label="密码"
+            prop="password"
+            :rules="[{
             required:true,message:'密码必须填写',
-          }]">
+          }]"
+          >
             <el-input v-model="logiForm.password" type="password" placeholder="输入管理员密码"></el-input>
           </el-form-item>
           <el-form-item>
@@ -41,24 +49,36 @@ export default {
     return {
       logiForm: {
         email: "",
-        password: "",
-      },
+        password: ""
+      }
     };
   },
   methods: {
-     login() {
-        this.$refs.login.validate(async vaild=>{
-          if(vaild){
-            this.$axios.post('auth/login',this.logiForm).then(res=>{
+    loginSuccess(){
+      this.$router.push("/");
+      this.$message({ type: "success", message: "登录成功" });
+    },
+    login() {
+      this.$refs.login.validate(async vaild => {
+        if (vaild) {
+          this.$axios
+            .post("auth/login", this.logiForm)
+            .then(res => {
               sessionStorage.token = res.data.token;
-              this.$message({type:"success",message:"登录成功"});
-              this.$router.push("/");
-            }).catch(()=>{
-              this.enter();
+              this.$store.commit("token", res.data.token);
+              this.loginSuccess();
             })
-          }
-        })
+            .catch(() => {
+              this.$message({type:'error',message:"服务器请求错误."})
+            });
+        }
+      });
     }
+  },
+  created() {
+    this.$axios.get("auth/user").then(()=>{
+      this.loginSuccess();
+    })
   }
 };
 </script>
@@ -71,12 +91,12 @@ export default {
   background: radial-gradient(1300px, #fff, #409eff);
 }
 .main .el-row {
-    margin-top: 170px;
-  }
+  margin-top: 170px;
+}
 .main h1 {
-    margin-bottom: 3.125rem;
-    color: #409eff;
-  }
+  margin-bottom: 3.125rem;
+  color: #409eff;
+}
 /* .main button {
     background: #409eff;
     width: 100%;
