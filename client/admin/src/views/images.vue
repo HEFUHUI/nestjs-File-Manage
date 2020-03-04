@@ -12,12 +12,16 @@
           <i class="el-icon-upload"></i>上传图片
         </el-button>
       </el-col>
+      
     </el-row>
     <el-row :gutter="20">
+      
       <el-col :span="2" v-for="(item,index) in images" :key="index" class="img-item" style="margin:10px 5px">
         <el-popover placement="top-start" title="属性" width="300" trigger="hover">
-          <el-image class="image" slot="reference" :preview-src-list="srcList" :src="/^[http|https]:\/\//.test(item.url) ? item.url : 'http://'+item.url" fit="cover"></el-image>图片地址:
-          <a :href="/^[http|https]:\/\//.test(item.url) ? item.url : 'http://'+item.url" target="_bink">{{item.url}}</a>
+          <el-image class="image" slot="reference" :preview-src-list="srcList" :src="/^[http|https]:\/\//.test(item.url) ? item.url : 'http://'+item.url" fit="cover"></el-image>
+          <p>图片地址:</p>
+          <el-link :underline="false" :href="/^[http|https]:\/\//.test(item.url) ? item.url : 'http://'+item.url" target="_bink">{{item.url}}</el-link>
+          <el-button size="mini" @click="copy(item.url)">copy</el-button>
           <div style="text-align: left; margin: 0">
             <p>图片别名:{{item.alias||"无"}}</p>
             <p>上传时间:{{item.createdAt|date}}</p>
@@ -34,10 +38,12 @@
         </el-popover>
         <span>{{item.alias && item.alias.substring(0,5)+(item.alias.length > 5 ? '...' :'')||"图片"+(index+1)}}</span>
       </el-col>
+      <input type="text" hidden value="hello" ref="copyText">
     </el-row>
-    <h-upload :visible.sync="uploadDialog" api="upload-local" @on-success="upload_result" drag >
-      <span slot="tip">只能上传图片</span>
+    <h-upload :visible.sync="uploadDialog" api="uploads-cos" multiple @on-success="upload_result" drag >
+      <span slot="tip">可多文件上传,仅图片上传</span>
     </h-upload>
+    
   </div>
 </template>
 <script>
@@ -74,6 +80,15 @@ export default {
       },()=>{
         this.$message("已取消");
       })
+    },
+    copy(url){
+      
+      this.$refs.copyText.value = url;
+      this.$refs.copyText.select();
+      console.log(this.$refs.copyText,url);
+      if(document.execCommand("copy")){
+        this.$message({type:"success",message:"复制成功"})
+      }
     },
     async info(id) {
       this.current_img = (await this.$axios.get(`images/${id}`)).data;

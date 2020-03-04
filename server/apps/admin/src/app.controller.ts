@@ -1,10 +1,13 @@
-import { Controller, Get, Post, UseInterceptors, UploadedFile, UploadedFiles, UseGuards } from '@nestjs/common';
+import { Controller, Get, Post, UseInterceptors, UploadedFile, UploadedFiles, UseGuards, Req } from '@nestjs/common';
 import { AppService } from './app.service';
 import { FilesInterceptor, FileInterceptor } from "@nestjs/platform-express"
 import {diskStorage} from "multer"
 import { Request } from 'express';
 import { AuthGuard } from '@nestjs/passport';
 import { ApiBearerAuth } from '@nestjs/swagger';
+import { Connection } from 'typeorm';
+import { InjectConnection } from '@nestjs/typeorm';
+import { image } from '@libs/db/entity/Image.entity';
 
 const Storage = diskStorage({
   destination(req: Request,
@@ -21,7 +24,7 @@ const Storage = diskStorage({
 
 @Controller("/")
 export class AppController {
-  constructor(private readonly appService: AppService) {}
+  constructor(private readonly appService: AppService,@InjectConnection() private readonly dbConnection:Connection) {}
   @Get("options")
   options(){
     return {
@@ -34,16 +37,19 @@ export class AppController {
   @ApiBearerAuth()
   @Post("upload-cos")
   @UseInterceptors(FileInterceptor("file"))
-  Upload(@UploadedFile("file") file:{}){
+  Upload(@UploadedFile("file") file:any,@Req() req){
+    this.appService.saveImage(req.user.id,file);
     return file;
   }
 
   @Post("uploads-cos")
   @UseGuards(AuthGuard("jwt"))
   @ApiBearerAuth()
-  @UseInterceptors(FilesInterceptor("file",5))
-  Uploads(@UploadedFiles() files:[]){
-    return files;
+  @UseInterceptors(FilesInterceptor("file",5))//拦截多图片上传，最大数量-5
+  Uploads(@UploadedFiles() files:[any],@Req() req:any){
+    return files.forEach((value,index,arr)=>{
+      return this.appService.saveImage(req.user.id,value);
+    })
   }
 
   @Post("upload-local")

@@ -3,15 +3,28 @@ import { Connection, QueryFailedError } from 'typeorm';
 import { userinfo } from '@libs/db/entity/users.entity';
 import { account } from '@libs/db/entity/Account.entity';
 import { image } from '@libs/db/entity/Image.entity';
+import { files } from '@libs/db/entity/files.entity';
 const Users = require("../../../userinfo.json");
 
 @Injectable()
 export class AppService {
   private _lock: boolean = false;
   constructor(private db: Connection) { }
-  getHello(): string {
-    return 'Hello World!';
+  async saveImage(userid:any,file:any):Promise<image>{
+    const img = new image()
+    img.author = userid;
+    img.url = file.url;
+    img.type = file.mimetype;
+    img.alias = this.ClearSuffixName(file.originalname)
+    return this.db.manager.save(img);;
   }
+
+  ClearSuffixName(name:string):string{
+    let arr:string[] =  name.split(".")
+    arr.pop();
+    return arr.join();
+  }
+
   async insertUser() {
     return new Promise(async (resolve, reject) => {
       try {

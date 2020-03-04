@@ -20,7 +20,7 @@ export class image{
     alias:string
 
     @ManyToOne(t=>account,t=>t.id,{nullable:true})
-    @JoinColumn({name:"account_id"})
+    @JoinColumn({name:"author"})
     author:account
 
     @ManyToMany(t=>files,t=>t.desc_image,{cascade:true})

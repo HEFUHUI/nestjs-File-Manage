@@ -74,7 +74,7 @@
             <el-button slot="reference" type="info" size="small">详情</el-button>
           </el-popover>
           <el-divider direction="vertical"></el-divider>
-          <el-popover placement="bottom-start" :title="row.name" width="300" trigger="hover">
+          <el-popover placement="bottom-start" :title="row.email" width="300" trigger="hover">
             <el-button type="primary" slot="reference" @click="handleCommand" size="small">选项</el-button>
             <el-button-group>
               <el-button type="warning" icon="el-icon-edit" @click="editDialog=true;user=row"></el-button>

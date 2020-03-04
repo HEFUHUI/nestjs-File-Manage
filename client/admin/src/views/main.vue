@@ -11,6 +11,10 @@
           <h4>{{UserInfo.nickName}}</h4>
           <span>{{UserInfo.email}}</span>
         </div>
+        <el-button type="primary" icon="el-icon-arrow-left" @click="logout">
+          退出
+        </el-button>
+        
       </div>
     </el-header>
     <el-container>
@@ -62,6 +66,12 @@ export default {
           userInfo:(await this.$axios.get("auth/user")).data,
           options: (await this.$axios.get("options")).data
         });
+      },
+      logout(){
+        this.$confirm("确定退出登录？").then(()=>{
+          sessionStorage.removeItem("token");
+          this.$router.push("/")
+        })
       }
     },
     computed:{
@@ -122,6 +132,6 @@ export default {
 }
 .main{
   max-height:100%;
-  overflow:auto;
+  /* overflow:auto; */
 }
 </style>

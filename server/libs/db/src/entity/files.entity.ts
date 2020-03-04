@@ -20,11 +20,17 @@ export class files{
     @Column({default:"private",enum:["public","private"],type:"enum"})
     share:string
 
+    @Column({type:"bigint",default:0})
+    size:number
+
     @Column({name:"name",nullable:true})
     name:string
 
     @Column({nullable:true})
     description:string
+
+    @Column({nullable:true})
+    icon:string
 
     @ManyToMany(t=>image,t=>t.file)
     @JoinTable({

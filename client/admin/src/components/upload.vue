@@ -15,7 +15,6 @@
           :auto-upload="false"
           :action="$axios.defaults.baseURL+'/'+api"
           v-bind="$attrs"
-          :limit="1"
         >
           <i class="el-icon-upload"></i>
           <div class="el-upload__text">

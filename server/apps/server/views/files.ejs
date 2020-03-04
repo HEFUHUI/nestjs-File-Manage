@@ -1,0 +1,23 @@
+<%- include('./compoments/header.ejs',{state:"files"}); -%>
+<div class="container">
+    <div class="row">
+        <% for (let i in files) { %>
+        <div class="col-4">
+            <div class="card" style="width: 18rem;">
+                <% if (files[i].desc_image[0]){%>
+                    <img src="http://<%- files[i].desc_image[0].url %>" class="card-img-top" alt="...">
+                <%}else{%>
+                    <img src="https://hefuhui-1258205592.cos.ap-guangzhou.myqcloud.com/node/3225a568d6b74f82488573af4ede0e6d" alt="">
+                <%}%>
+                <div class="card-body">
+                    <h5 class="card-title">
+                        <%- files[i].name %></h5>
+                    <p class="card-text"><%- files[i].description%></p>
+                    <a href="#" class="btn btn-primary">Go somewhere</a>
+                </div>
+            </div>
+        </div>
+        <% } %>
+    </div>
+</div>
+<%- include('./compoments/footer.ejs',{}); -%>
