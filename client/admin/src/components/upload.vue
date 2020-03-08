@@ -29,13 +29,15 @@
     </el-row>
     <el-row v-if="mode">
       <el-col :span="24" style="padding:10px;padding-top:20px">
+        <el-alert title="务必确定资源长时间可用!"  type="warning"></el-alert>
+        <br>
         <el-form :inline="true">
           <el-form-item label="手动输入URL">
-            <el-input v-model="value">
-              <template slot="prepend">Http://</template>
-            </el-input>
+            <el-input v-model="value" placeholder="输入图片地址http://"></el-input>
           </el-form-item>
-          <el-button type="primary">确定</el-button>
+          <el-form-item label="别名">
+            <el-input v-model="alias" placeholder="输入别名"></el-input>
+          </el-form-item>
         </el-form>
       </el-col>
     </el-row>
@@ -52,6 +54,7 @@ export default {
   props: ["api","value","visible"],
   data() {
     return {
+      alias:"",
       mode: false,
     };
   },
@@ -60,33 +63,39 @@ export default {
       this.$message({ type: "error", message: err.message });
     },
     success(response) {
-      this.$message({type:'success',message:"上传成功"})
+      this.alert_success("上传成功");
       if(this.api == "upload-local"){
         this.$store.commit("upload",response)
       }
       this.$emit("success",response)
       this.$emit("input",response.url);
+      this.$emit('update:visible', false)
     },
+
     async enter() {
       if (this.mode) {
-        this.$message({type:'success',message:"上传成功"})
-        let url = this.value.split("\\")
+        this.alert_success("上传成功")
         this.$store.commit("upload",{
           size:0,
           fieldname:"null",
-          originalname:url[url.length-1],
+          originalname:'undefined',
           mimetype:"null"
+        });
+        this.$axios.post('images',{
+          author:this.$store.getters.userInfo.id,
+          url:this.value,
+          alias:this.alias
         })
         this.$emit("input", this.value);
         this.$emit("success",{url:this.value});
+        this.$emit('update:visible', false)
       }else{
         await this.$refs.upload.submit();
       }
-      this.$emit('update:visible', false)
+      
     }
   },
   created(){
-    console.log(this.value);
     this.$emit("input", '');
   }
 };

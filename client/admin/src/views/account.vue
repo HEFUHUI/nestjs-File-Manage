@@ -1,21 +1,6 @@
 <template>
   <div>
-    <el-row type="flex" style="margin:10px">
-      <el-col>
-        <el-page-header @back="$router.go(-1)" style="line-height:60px" :content="options.title"></el-page-header>
-      </el-col>
-      <el-col style="text-align:right;margin-top:10px">
-        <el-tooltip class="item" content="刷新" placement="top">
-          <el-button type="primary" size="small" icon="el-icon-refresh-right" @click="fetch(1)">刷新</el-button>
-        </el-tooltip>
-        <el-button size="small" type="success" @click="accountDialog = true">
-          <i class="el-icon-plus"></i>添加
-        </el-button>
-        <el-button size="small" type="warning" @click="accountDialog = true">
-          <i class="el-icon-search"></i>筛选
-        </el-button>
-      </el-col>
-    </el-row>
+    <h-page-header :content="options.title" @refresh="fetch(1)" @add="accountDialog = true"></h-page-header>
     <el-table :data="source.data" border stripe>
       <el-table-column type="index" align="center" label="序号" width="50"></el-table-column>
       <el-table-column
@@ -37,6 +22,15 @@
         align="center"
         :width="options.columns[index].width"
       ></el-table-column>
+      <el-table-column
+        label="头像"
+        align="center"
+        width="80">
+        <template slot-scope="{row}">
+          <el-image :src="row.avatar.url | url" style="width:50px;height:50px" fit="cover" alt=""></el-image>
+        </template>
+      </el-table-column>
+      
       <el-table-column label="角色?" align="left">
         <template slot-scope="{row}">
           <template v-if="row.info === null">
@@ -74,14 +68,17 @@
             <el-button slot="reference" type="info" size="small">详情</el-button>
           </el-popover>
           <el-divider direction="vertical"></el-divider>
-          <el-popover placement="bottom-start" :title="row.email" width="300" trigger="hover">
-            <el-button type="primary" slot="reference" @click="handleCommand" size="small">选项</el-button>
+          <el-button type="primary" slot="reference" @click="optionsDialog = true;user = row" size="small">选项</el-button>
+          <!-- <el-popover placement="bottom-start" :title="row.email" width="300" trigger="hover">
             <el-button-group>
               <el-button type="warning" icon="el-icon-edit" @click="editDialog=true;user=row"></el-button>
-              <el-button :type="row.state === 'disabled' ? 'primary':'info'" @click="row.state !== 'disabled' ? disable(row) : enable(row)">{{row.state === 'disabled' ? "启" : "禁"}}用账户</el-button>
+              <el-button
+                :type="row.state === 'disabled' ? 'primary':'info'"
+                @click="row.state !== 'disabled' ? disable(row) : enable(row)"
+              >{{row.state === 'disabled' ? "启" : "禁"}}用账户</el-button>
               <el-button type="danger" icon="el-icon-delete" @click="del(row)"></el-button>
             </el-button-group>
-          </el-popover>
+          </el-popover> -->
         </template>
       </el-table-column>
     </el-table>
@@ -111,22 +108,64 @@
       </span>
     </el-dialog>
     <el-dialog title="编辑" :visible.sync="editDialog" size="50%">
-      <ele-form
-        :formData="user"
-        :isShowBackBtn="false"
-        :formDesc="options.columns"
-        :request-fn="edit"
-      ></ele-form>
+      <el-form :model="user" ref="user" label-width="80px">
+        <el-form-item label="账户昵称">
+          <el-input v-model="user.nickName"></el-input>
+        </el-form-item>
+        <el-form-item label="账户密码">
+          <el-input v-model="user.passowrd" placeholder></el-input>
+        </el-form-item>
+        <el-form-item label="爱好">
+          <el-input v-model="user.like" placeholder="输入爱好"></el-input>
+        </el-form-item>
+        <el-form-item label="座右铭">
+          <el-input v-model="user.motto" placeholder="输入座右铭"></el-input>
+        </el-form-item>
+        <el-form-item label="个人信息">
+          <h-select-user :visible.sync="selectUser" :multiple="false" v-model="user.info">
+            <el-button type="primary" @click="selectUser = true" slot="active">选择</el-button>
+          </h-select-user>
+        </el-form-item>
+      </el-form>
+      <span slot="footer">
+        <el-button @click="editDialog = false">取 消</el-button>
+        <!-- <el-button type="primary" @click="edit(user)">确 定</el-button> -->
+      </span>
     </el-dialog>
     <el-dialog title="选项" :visible.sync="optionsDialog" width="50%">
+      <el-tabs v-model="option_tab"
+        type="card">
+        <el-tab-pane label = "更改密码" name="pass">
+          <el-form :model="user" ref="user" inline label-width="80px">
+            <el-form-item label="密码" >
+              <el-input v-model="user.password" placeholder="输入新的用户密码"></el-input>
+            </el-form-item>
+            <el-form-item>
+              <el-button type="primary" @click="changePassword">保存</el-button>
+            </el-form-item>
+          </el-form>
+        </el-tab-pane>
+        <el-tab-pane label = "更改头像" name="avatar">
+        </el-tab-pane>
+        <el-tab-pane label = "编辑基本信息" name="basic_info">
+        </el-tab-pane>
+        <el-tab-pane label = "禁用账户" name="disabled">
+        </el-tab-pane>
+      </el-tabs>
       <span slot="footer">
         <el-button @click="optionsDialog = false">取 消</el-button>
         <el-button type="primary" @click="optionsDialog = false">确 定</el-button>
       </span>
     </el-dialog>
+    <h-select-image :visible.sync="selectAvatar" :multiple="false" v-model="user.avatar">
+        <el-button type="primary" @click="selectAvatar = true" slot="active">选择</el-button>
+    </h-select-image>
   </div>
 </template>
 <script>
+import hPageHeader from "../components/page_header"
+import hSelectImage from "../components/select_image";
+import hSelectUser from "../components/select_user";
 export default {
   data() {
     return {
@@ -135,11 +174,14 @@ export default {
         total: 7,
         page_size: 10
       },
+      option_tab:'pass',
       dateRange: "",
       optionsDialog: false,
       editDialog: false,
       accountDialog: false,
+      selectUser: false,
       user: {},
+      selectAvatar: false,
       account: {},
       source: [],
       options: { tieOptions: [], columns: {}, title: "" },
@@ -152,43 +194,39 @@ export default {
       this.fetch(1, val);
     }
   },
-  components: {},
+  components: {
+    hSelectImage,
+    hSelectUser,
+    hPageHeader
+  },
   methods: {
+    async changePassword(){
+      await this.$axios.put(`account/${this.user.id}`,{password:this.user.password});
+      this.alert_success("保存成功");
+    },
     async filters(value, row, column) {
       console.log(value, row, column);
-    },
-    async handleCommand() {
-      this.optionsDialog = true;
     },
     handleCurrentChange(page) {
       this.pagination.currentPage = page;
       this.fetch(page);
     },
-    async disable({email,id}){
-      this.$confirm(`确定要禁用${email}的登录吗？`).then(()=>{
-        this.$axios.put(`account/${id}`,{state:"disabled"}).then(()=>{
-          this.$message({type:"success",message:`${email}已被禁用`})
-          this.fetch();
-        })
-      })
+    async disable({ email, id }) {
+      await this.$confirm(`确定要禁用${email}的登录吗？`);
+      await this.$axios.put(`account/${id}`, { state: "disabled" });
+      this.alert_success(`${email}已被禁用`);
+      this.fetch();
     },
-    async enable({id}){
-      this.$axios.put(`account/${id}`,{state:"enabled"}).then(()=>{
-        this.$message("账户已启用");
-        this.fetch();
-      })
+    async enable({ id }) {
+      await this.$axios.put(`account/${id}`, { state: "enabled" });
+      this.alert_success("账户已启用.");
+      this.fetch();
     },
     async add({ email, password }) {
-      this.$axios.post(`account`, { email, password }).then(
-        () => {
-          this.$message({ type: "success", message: "添加成功." });
-          this.accountDialog = false;
-          this.fetch();
-        },
-        () => {
-          this.$message({ type: "warning", message: "数据格式不合法." });
-        }
-      );
+      await this.$axios.post(`account`, { email, password });
+      this.alert_success("添加成功.");
+      this.accountDialog = false;
+      this.fetch();
     },
 
     async handleSizeChange(size) {
@@ -197,25 +235,23 @@ export default {
     },
 
     async del({ email, id }) {
-      this.$confirm(`确定删除${email}的信息吗?`).then(async () => {
-        await this.$axios.delete(`account/${id}`);
-        this.fetch();
-      });
+      await this.$confirm(`确定删除${email}的信息吗?`);
+      await this.$axios.delete(`account/${id}`);
+      this.fetch();
     },
 
-    async edit({ nickName, email, like, motto, id, password }) {
-      this.$axios
-        .put(`account/${id}`, { like, motto, email, nickName, password })
-        .then(
-          () => {
-            this.$message({ type: "success", message: "保存成功" });
-          },
-          () => {
-            this.$message({ type: "warning", message: "数据格式不合法" });
-          }
-        );
-      this.editDialog = false;
-    },
+    // async edit({ nickName, info, email, like, motto, id, password }) {
+      // await this.$axios.put(`account/${id}`, {
+      //   like,
+      //   motto,
+      //   email,
+      //   info,
+      //   nickName,
+      //   password
+      // });
+      // this.alert_success("保存成功");
+      // this.editDialog = false;
+    // },
 
     async fetch(page = 1) {
       let sortStr = "";

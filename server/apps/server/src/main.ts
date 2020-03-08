@@ -8,9 +8,6 @@ import * as session from "express-session"
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
   app.enableCors();
-  app.use(session({
-    secret:"123"
-  }))
   const options = new DocumentBuilder()
     .setTitle('Cats example')
     .setDescription('The cats API description')

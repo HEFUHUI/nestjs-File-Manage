@@ -7,7 +7,7 @@ import { Connection } from 'typeorm';
 import { userinfo } from '@libs/db/entity/users.entity';
 import { AuthGuard } from '@nestjs/passport';
 
-@UseGuards(AuthGuard('jwt'))
+@UseGuards(AuthGuard('admin'))
 @ApiBearerAuth()
 @Crud({
     model:{

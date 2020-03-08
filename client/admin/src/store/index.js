@@ -5,7 +5,11 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
-    currentUser:{},
+    currentUser:{
+      avatar:{
+        url:"http://hefuhui-1258205592.cos.ap-guangzhou.myqcloud.com/files/8f172a08e99a8ef869cc044dcf5ae12d.png"
+      }
+    },
     options:{},
     token:'',
     JustUploadFile:{}

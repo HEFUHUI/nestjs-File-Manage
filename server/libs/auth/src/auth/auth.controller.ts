@@ -25,15 +25,19 @@ class loginResult{
 @Controller('auth')
 export class AuthController {
     constructor(private service:AuthService) {}
+    
     @Post('/login')
     @UseGuards(AuthGuard("local"))
-    login(@Body() dto: LoginDto, @Req() req):loginResult{
+    login(@Body() dto: LoginDto, @Req() req:any):loginResult{
         return {status:true,token:this.service.login(req.user)}
     }
+
     @Get("user")
-    @UseGuards(AuthGuard('jwt'))
+    @UseGuards(AuthGuard('web'))
     @ApiBearerAuth()
-    getUser(@Req() req){
-        return req.user;
+    getUser(@Req() req:any){
+        return {
+            user:req.user
+        };
     }
 }

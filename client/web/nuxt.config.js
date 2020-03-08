@@ -30,6 +30,7 @@ module.exports = {
   ** Plugins to load before mounting the App
   */
   plugins: [
+    "~plugins/axios"
   ],
   /*
   ** Nuxt.js dev-modules
@@ -44,15 +45,29 @@ module.exports = {
     // Doc: https://axios.nuxtjs.org/usage
     '@nuxtjs/axios',
     '@nuxtjs/pwa',
+    '@nuxtjs/auth',
     // Doc: https://github.com/nuxt-community/dotenv-module
     '@nuxtjs/dotenv',
   ],
+  auth:{
+    strategies: {
+      local: {
+        endpoints: {
+          login: { url: 'auth/login', method: 'post', propertyName: 'token' },
+          // logout: { url: 'auth/logout', method: 'get' },
+          user: { url: 'auth/user', method: 'get', propertyName: 'user' }
+        },
+        tokenRequired: true,
+        tokenType: 'bearer'
+      }
+    }
+  },
   /*
   ** Axios module configuration
   ** See https://axios.nuxtjs.org/options
   */
   axios: {
-    baseUrl:"http://localhost:3001"
+    baseURL:"http://localhost:3001"
   },
   /*
   ** vuetify module configuration

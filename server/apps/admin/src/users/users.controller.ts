@@ -6,7 +6,7 @@ import { ApiTags, ApiBearerAuth } from '@nestjs/swagger';
 import { Connection } from 'typeorm';
 import { AuthGuard } from '@nestjs/passport';
 
-@UseGuards(AuthGuard('jwt'))
+@UseGuards(AuthGuard('admin'))
 @ApiBearerAuth()
 @Crud({
     model: {
@@ -28,6 +28,15 @@ import { AuthGuard } from '@nestjs/passport';
                 eager: true
             },
             department:{
+                allow:["name"],
+                eager:true
+            },
+            leader:{
+                allow:["name"],
+                eager:true
+            },
+            viceLeader:{
+                allow:["name"],
                 eager:true
             }
         }
@@ -36,7 +45,7 @@ import { AuthGuard } from '@nestjs/passport';
 @ApiTags("用户管理")
 @Controller('users')
 export class UsersController {
-    constructor(public service: UsersService, private readonly db: Connection) { }
+    constructor(public service: UsersService, private readonly db: Connection) {}
     @Get("options")
     async options() {
         let tieOptions = [

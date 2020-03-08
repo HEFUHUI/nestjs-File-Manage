@@ -33,17 +33,17 @@ export class AppController {
     }
   }
 
-  @UseGuards(AuthGuard("jwt"))
+  @UseGuards(AuthGuard("admin"))
   @ApiBearerAuth()
   @Post("upload-cos")
   @UseInterceptors(FileInterceptor("file"))
-  Upload(@UploadedFile("file") file:any,@Req() req){
-    this.appService.saveImage(req.user.id,file);
+  Upload(@UploadedFile("file") file:any){
+    // this.appService.saveImage(req.user.id,file);
     return file;
   }
 
   @Post("uploads-cos")
-  @UseGuards(AuthGuard("jwt"))
+  @UseGuards(AuthGuard("admin"))
   @ApiBearerAuth()
   @UseInterceptors(FilesInterceptor("file",5))//拦截多图片上传，最大数量-5
   Uploads(@UploadedFiles() files:[any],@Req() req:any){
@@ -53,7 +53,7 @@ export class AppController {
   }
 
   @Post("upload-local")
-  @UseGuards(AuthGuard("jwt"))
+  @UseGuards(AuthGuard("admin"))
   @ApiBearerAuth()
   @UseInterceptors(FileInterceptor("file",{storage:Storage}))
   uploadLocal(@UploadedFile("file") file:{}){

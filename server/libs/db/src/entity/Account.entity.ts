@@ -1,7 +1,8 @@
-import { Entity, PrimaryGeneratedColumn, Column, JoinColumn, OneToOne, OneToMany, ManyToOne } from "typeorm";
+import { Entity, PrimaryGeneratedColumn, Column, JoinColumn, OneToOne, OneToMany, ManyToOne, ManyToMany } from "typeorm";
 import { userinfo } from "./users.entity";
 import { image } from "./Image.entity";
 import { hashSync, compareSync } from "bcrypt"
+import { files } from "./files.entity";
 
 @Entity()
 export class account {
@@ -30,12 +31,12 @@ export class account {
     @Column({type:"enum",enum:["enabled","disabled"],name:'state',comment:'账户是否禁用状态'})
     state:string
 
-    @OneToOne(t => image, t => t.id, { nullable: true })
+    @ManyToOne(t => image, t => t.id, { nullable: true })
     @JoinColumn({ name: "cover" })
     cover: image
 
-    @OneToOne(t => image, t => t.id, { nullable: true })
-    @JoinColumn({ name: "avatar" })
+    @ManyToOne(() => image, t => t.id)
+    @JoinColumn()
     avatar: image
 
     @Column({ comment: "爱好", nullable: true })
@@ -56,6 +57,9 @@ export class account {
     @ManyToOne(() => userinfo, t => t.account)
     @JoinColumn()
     info: userinfo
+
+    @ManyToMany(t=>files,t=>t.collection,{cascade:true})
+    collection:files[]
 
     @Column({ onUpdate: "CURRENT_TIMESTAMP", default: () => "CURRENT_TIMESTAMP", name: "update_at", type: 'timestamp' })
     updateAt: Date

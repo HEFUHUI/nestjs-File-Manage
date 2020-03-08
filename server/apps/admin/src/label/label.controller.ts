@@ -5,7 +5,7 @@ import { label } from '@libs/db/entity/label.entity';
 import { LabelService } from './label.service';
 import { AuthGuard } from '@nestjs/passport';
 
-@UseGuards(AuthGuard("jwt"))
+@UseGuards(AuthGuard("admin"))
 @ApiBearerAuth()
 @Crud({
     model: {

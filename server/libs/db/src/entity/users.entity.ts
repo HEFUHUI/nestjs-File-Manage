@@ -3,6 +3,7 @@ import { department } from "./department.entity";
 import { image } from "./Image.entity";
 import { ApiProperty } from "@nestjs/swagger";
 import { account } from "./Account.entity";
+import { JoinAttribute } from "typeorm/query-builder/JoinAttribute";
 
 @Entity()
 export class userinfo{
@@ -38,6 +39,12 @@ export class userinfo{
 
     @Column({type:"date",nullable:true,default:"2019-10-10"})
     birthday:Date
+
+    @OneToOne(t=>department,t=>t.leader)
+    leader:department
+
+    @OneToOne(t=>department,t=>t.viceLeader)
+    viceLeader:department
 
     @ApiProperty()
     @OneToMany(t=>account,t=>t.info,{nullable:true})

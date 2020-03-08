@@ -1,11 +1,11 @@
-import { Controller, UseGuards } from '@nestjs/common';
+import { Controller, UseGuards, Get } from '@nestjs/common';
 import { Crud } from '@nestjsx/crud';
 import { image } from '@libs/db/entity/Image.entity';
 import { ApiTags, ApiBearerAuth } from '@nestjs/swagger';
 import { ImagesService } from './images.service';
 import { AuthGuard } from '@nestjs/passport';
 
-@UseGuards(AuthGuard('jwt'))
+@UseGuards(AuthGuard('admin'))
 @ApiBearerAuth()
 @Crud({
     model:{
@@ -32,4 +32,8 @@ import { AuthGuard } from '@nestjs/passport';
 @Controller('images')
 export class ImagesController {
     constructor(public service:ImagesService){}
+    @Get("cos")
+    async getCosImg(){
+      return  await this.service.getCosImg(); 
+    }
 }

@@ -1,5 +1,5 @@
 <template>
-  <div class="main">
+  <div class="Main">
     <el-row>
       <el-col
         :lg="{span:8,offset:8}"
@@ -68,8 +68,10 @@ export default {
               this.$store.commit("token", res.data.token);
               this.loginSuccess();
             })
-            .catch(() => {
-              this.$message({type:'error',message:"服务器请求错误."})
+            .catch(err => {
+              if(!/401/.test(err.message)){
+                this.$message({type:'error',message:"服务器错误.请重试!"})
+              }
             });
         }
       });
@@ -83,19 +85,25 @@ export default {
 };
 </script>
 
-<style scoped>
-.main {
+<style>
+.Main {
+  color: #fff;
   width: 100%;
   height: 100vh;
   overflow: hidden;
-  background: radial-gradient(1300px, #fff, #409eff);
+  /* background: radial-gradient(1300px, #fff, #409eff); */
+  background: url("http://hefuhui-1258205592.cos.ap-guangzhou.myqcloud.com/files/c6e753549c2d92a561349d0ea9f68608.jpg");
+  background-size: 100%;
 }
-.main .el-row {
+.Main .el-row {
   margin-top: 170px;
 }
-.main h1 {
+.Main h1 {
   margin-bottom: 3.125rem;
   color: #409eff;
+}
+.el-form-item__label{
+  color: #409eff !important;
 }
 /* .main button {
     background: #409eff;

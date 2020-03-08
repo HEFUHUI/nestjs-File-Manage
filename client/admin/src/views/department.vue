@@ -1,18 +1,6 @@
 <template>
   <div>
-    <el-row type="flex" style="margin:10px">
-      <el-col>
-        <el-page-header @back="$router.go(-1)" style="line-height:60px" :content="options.title"></el-page-header>
-      </el-col>
-      <el-col style="text-align:right;margin-top:10px">
-        <el-tooltip class="item" content="刷新" placement="top">
-          <el-button type="primary" size="small" icon="el-icon-refresh-right" @click="fetch(1)">刷新</el-button>
-        </el-tooltip>
-        <el-button size="small" type="success" @click="addDialog = true">
-          <i class="el-icon-plus"></i>添加
-        </el-button>
-      </el-col>
-    </el-row>
+    <h-page-header :content="options.title" @refresh="fetch(1)" @add="addDialog = true"></h-page-header>
     <el-table :data="sources" border stripe>
       <el-table-column type="index" align="center" label="序号" width="50"></el-table-column>
       <el-table-column
@@ -88,24 +76,14 @@
           <el-input v-model="source.name" placeholder="磨铁部"></el-input>
         </el-form-item>
         <el-form-item label="部长">
-          <el-select v-model="source.leader" placeholder="李四-17磨铁高职班">
-            <el-option
-              v-for="item in users"
-              :key="item.id"
-              :label="item.name + '-'+item.class"
-              :value="item.id"
-            ></el-option>
-          </el-select>
+          <h-user-select  :disabled="true" :multiple="false" :visible.sync="select_leader" v-model="source.leader">
+            <el-button type="primary" @click="select_leader = true" slot="active" size="mini">选择</el-button>
+          </h-user-select>
         </el-form-item>
         <el-form-item label="副部长">
-          <el-select v-model="source.viceLeader" placeholder="张三-17网络高级2班">
-            <el-option
-              v-for="item in users"
-              :key="item.id"
-              :label="item.name + '-'+item.class"
-              :value="item.id"
-            ></el-option>
-          </el-select>
+          <h-user-select  :disabled="true" :multiple="false" :visible.sync="select_viceLeader" v-model="source.viceLeader">
+            <el-button type="primary" @click="select_viceLeader = true" slot="active" size="mini">选择</el-button>
+          </h-user-select>
         </el-form-item>
       </el-form>
       <span slot="footer">
@@ -123,7 +101,10 @@
         <el-table-column label="系别" prop="tie"></el-table-column>
         <el-table-column label="操作">
           <template slot-scope="{row}">
-            <el-button type="danger" @click="$axios.put(`users/${row.id}`,{department:null}),fetch()">移除</el-button>
+            <el-button
+              type="danger"
+              @click="$axios.put(`users/${row.id}`,{department:null}),fetch()"
+            >移除</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -132,7 +113,12 @@
         <el-button type="primary" @click="optionsDialog = false">确 定</el-button>
       </span>
     </el-dialog>
+
+    <!-- disabled属性用于禁用已有部门的人 -->
     <h-user-select
+      :disabled="true"
+      :multiple="true"
+      :not_result="true"
       :visible.sync="select_user"
       @result="PushUser"
       v-model="select_users"
@@ -141,14 +127,17 @@
   </div>
 </template>
 <script>
+import hPageHeader from "../components/page_header"
 import hUserSelect from "../components/select_user";
 export default {
   data() {
     return {
+      select_leader:false,
       optionsDialog: false,
       editDialog: false,
       source: {},
       select_user: false,
+      select_viceLeader:false,
       sources: [],
       select_users: [],
       options: { tieOptions: [], columns: {}, title: "" },
@@ -157,7 +146,8 @@ export default {
     };
   },
   components: {
-    hUserSelect
+    hUserSelect,
+    hPageHeader
   },
   computed: {},
   methods: {
@@ -166,53 +156,47 @@ export default {
       this.optionsDialog = true;
     },
     async PushUser() {
-      this.select_users.forEach(element => {
-        this.$axios
-          .put(`users/${element}`, { department: this.source.id })
-          .catch(() => {
-            throw new Error("错误");
-          });
+      this.select_users.forEach(async element => {
+        await this.$axios.put(`users/${element.id}`, {
+          department: this.source.id
+        });
+        this.alert_success(`已添加${element.name}到${this.source.name}`);
+        this.fetch()
       });
     },
     async addUser(source) {
       this.source = source;
+      this.select_users = [];
       this.select_user = true;
     },
     async add(source) {
-      this.$axios.post(`departments`, source).catch(() => {
-        this.$message({ type: "warning", message: "数据格式不合法" });
-      });
+      await this.$axios.post(`departments`, source);
       this.addDialog = false;
       this.fetch();
     },
     async del(source) {
       if (source.leader) {
-        this.$axios.put(`users/${source.leader.id}`, { department: null });
+        await this.$axios.put(`users/${source.leader.id}`, {
+          department: null
+        });
       }
       if (source.viceLeader) {
-        this.$axios.put(`users/${source.viceLeader.id}`, { department: null });
+        await this.$axios.put(`users/${source.viceLeader.id}`, {
+          department: null
+        });
       }
-      this.$confirm(`确定删除${source.name}的信息吗?`).then(async () => {
-        this.$axios.delete(`departments/${source.id}`).then(
-          () => {
-            this.$message({ type: "success", message: "操作成功" });
-            this.fetch();
-          },
-          () => {
-            this.$message({ type: "warning", message: "部门有人不能删除" });
-          }
-        );
-      });
+      await this.$confirm(`确定删除${source.name}的信息吗?`);
+      try {
+        await this.$axios.delete(`departments/${source.id}`);
+        this.alert_success("删除成功.");
+      } catch (error) {
+        this.alert_error("部门有人不能删除.");
+      }
+      this.fetch();
     },
     async edit(source) {
-      this.$axios.put(`departments/${source.id}`, source).then(
-        () => {
-          this.$message({ type: "success", message: "保存成功" });
-        },
-        () => {
-          this.$message({ type: "warning", message: "数据格式不合法" });
-        }
-      );
+      await this.$axios.put(`departments/${source.id}`, source);
+      this.alert_success("保存成功.");
       this.editDialog = false;
     },
     async fetch() {

@@ -1,16 +1,13 @@
-import { Controller, UseGuards, Get, Body, HttpCode, Put } from '@nestjs/common';
+import { Controller, UseGuards, Get } from '@nestjs/common';
 import { Crud } from '@nestjsx/crud';
 import { files } from '@libs/db/entity/files.entity';
 import { FilesService } from './files.service';
-import { AuthGuard } from '@nestjs/passport';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
-import { FileLabelRelation } from './dtos';
 import { InjectConnection } from '@nestjs/typeorm';
 import { Connection } from 'typeorm';
-import { image } from '@libs/db/entity/Image.entity';
-import { label } from '@libs/db/entity/label.entity';
+import { AuthGuard } from '@nestjs/passport';
 
-@UseGuards(AuthGuard("jwt"))
+@UseGuards(AuthGuard("admin"))
 @ApiBearerAuth()
 @Crud({
     model:{

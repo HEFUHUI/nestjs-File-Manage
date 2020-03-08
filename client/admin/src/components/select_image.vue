@@ -17,8 +17,13 @@
           <el-tooltip class="item" content="刷新" placement="top">
             <el-button type="primary" size="small" icon="el-icon-refresh-right" @click="fetch(1)">刷新</el-button>
           </el-tooltip>
-          <h-upload api="upload-cos" @success="uploadSuccess" :visible.sync="uploadDialog">
-            <el-button size="small" @click="uploadDialog = true" slot="active" type="success">
+          <h-upload api="upload-cos" :visible.sync="uploadDialog">
+            <el-button
+              size="small"
+              @click="uploadDialog = true;file = {};"
+              slot="active"
+              type="success"
+            >
               <i class="el-icon-plus"></i>添加上传
             </el-button>
           </h-upload>
@@ -29,10 +34,10 @@
       </el-row>
       <el-row :gutter="20" style="text-align:left">
         <el-col :span="24">
-          <el-checkbox-group v-model="selectds">
-            <el-checkbox v-for="image in images" :label="image.id" :key="image.id">
+          <el-checkbox-group v-if="multiple" v-model="selectds">
+            <el-checkbox v-for="image in images" :label="image" :key="image.id">
               <el-image
-                :src="'http://'+image.url"
+                :src="image.url | url"
                 class="img-item"
                 fit="cover"
                 width="100px"
@@ -40,6 +45,17 @@
               ></el-image>
             </el-checkbox>
           </el-checkbox-group>
+          <div v-else>
+            <el-radio v-for="image in images" :label="image" :key="image.id" v-model="selectds">
+              <el-image
+                :src="image.url | url"
+                class="img-item"
+                fit="cover"
+                width="100px"
+                height="100px"
+              ></el-image>
+            </el-radio>
+          </div>
         </el-col>
         <el-col :span="24">
           <el-pagination
@@ -48,7 +64,7 @@
             @current-change="handleCurrentChange"
             :current-page="pagination.currentPage"
             :background="true"
-            :page-sizes="[5,10,15,20,25]"
+            :page-sizes="[10,20,30,40,50]"
             :page-size="pagination.page_size"
             layout="sizes, prev, pager, next, jumper, ->, total, slot"
             :total="pagination.total"
@@ -60,21 +76,61 @@
         <el-button type="primary" @click="enter">确 定</el-button>
       </span>
     </el-dialog>
-    <slot name="active"></slot>
+    <slot name="active" v-if="!value"></slot>
+    <el-row :gutter="20" v-else>
+      <template v-if="multiple">
+        <el-col :span="4" v-for="item in value" :key="item.id">
+          <el-image
+            :preview-src-list="[/^(http|https)/.test(item.url) ? item.url : 'http://'+item.url]"
+            :src="item.url | url"
+            fit="cover"
+            alt
+          ></el-image>
+        </el-col>
+        <el-button type="primary" @click="$emit('update:visible',true)">
+          <i class="el-icon-plus"></i>添加
+        </el-button>
+      </template>
+      <template v-else>
+        <el-col :span="4">
+          <el-image
+            :preview-src-list="[/^(http|https)/.test(value.url) ? value.url : 'http://'+value.url]"
+            :src="value.url | url"
+            fit="cover"
+            alt
+          ></el-image>
+        </el-col>
+        <el-button type="primary" @click="$emit('update:visible',true)">
+          <i class="el-icon-plus"></i>更改
+        </el-button>
+      </template>
+    </el-row>
   </span>
 </template>
 <script>
 import hUpload from "../components/upload";
 export default {
   name: "selectImage",
-  props: ["api", "value", "visible"],
+  props: {
+    api: {
+      type: String
+    },
+    value: {},
+    visible: {
+      type: Boolean
+    },
+    multiple: {
+      type: Boolean,
+      default: true
+    }
+  },
   data() {
     return {
       uploadDialog: false,
       pagination: {
         currentPage: 1,
         total: 7,
-        page_size: 10
+        page_size: 30
       },
       selectds: [],
       images: []
@@ -84,13 +140,7 @@ export default {
     hUpload
   },
   methods: {
-    async uploadSuccess(res) {
-      await this.$axios.post("images", {
-        url: res.url,
-        type: res.mimetype,
-        alias: res.originalname,
-        author: this.$store.getters.userInfo.id
-      });
+    async uploadSuccess() {
       this.fetch(this.pagination.currentPage);
     },
     error(err) {
@@ -100,7 +150,7 @@ export default {
       if (this.mode) {
         this.$emit("input", this.value);
       }
-      this.$emit('input',this.selectds)
+      this.$emit("input", this.selectds);
       this.$emit("update:visible", false);
     },
     handleCurrentChange(page) {
@@ -112,6 +162,7 @@ export default {
       this.fetch(this.pagination.currentPage);
     },
     async fetch(page = 1) {
+      this.file = {};
       const images = (
         await this.$axios.get(
           `images?limit=${this.pagination.page_size}&page=${page}`

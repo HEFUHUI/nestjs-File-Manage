@@ -44,6 +44,18 @@ export class files{
     })
     desc_image:image[]
 
+    @ManyToMany(t=>account,t=>t.collection)
+    @JoinTable({
+        name:"file_account",
+        joinColumns:[
+            {name:"file_id"}
+        ],
+        inverseJoinColumns:[
+            {name:'user_id'}
+        ]
+    })
+    collection:account[]
+
     @ManyToOne(t=>account,t=>t.id,{nullable:false})
     @JoinColumn({name:"user_id"})
     author:account

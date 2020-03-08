@@ -8,10 +8,36 @@ Vue.config.productionTip = false
 import EleForm from 'vue-ele-form'
 import store from './store'
 
+import {
+  Message
+} from "element-ui"
+
+
 Vue.use(EleForm)
 
 Vue.filter('date', function (value) {
   return new Date(value).toLocaleString();
+})
+Vue.filter('url', function (value) {
+  return /^(http|https)/.test(value) ? value : ('http://'+value);
+})
+
+
+Vue.mixin({
+  methods: {
+    alert_success(str) {
+      Message({
+        type: 'success',
+        message: str || "操作成功"
+      })
+    },
+    alert_error(str) {
+      Message({
+        type: "error",
+        message: str || "操作错误"
+      })
+    }
+  }
 })
 
 new Vue({

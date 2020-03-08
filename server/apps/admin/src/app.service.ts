@@ -46,6 +46,7 @@ export class AppService {
           a.email = u.email;
           a.password = u.password[0].password;
           a.motto = u.motto;
+          a.Grade = 500;
           a.like = u.like || null;
           a.createdAt = u.createdAt;
           a.updateAt = u.updateAt;
@@ -74,8 +75,13 @@ export class AppService {
           images.url = u.uri;
           images.author = await this.db.manager.findOne(account, { where: { email: u.author[0].email } })
           await this.db.manager.save(images)
-          resolve();
         }
+        (await this.db.manager.find(account)).forEach(async element=>{
+          element.avatar = await this.db.manager.findOne(image,{where:{alias:'5d9e8dc98abe824599b587f4'}})
+          element.cover = await this.db.manager.findOne(image,{where:{alias:'5d948e32e415512db1b81c74'}});
+          await this.db.manager.save(element);
+        })
+        resolve();
       } catch (error) {
         reject(error)
       }

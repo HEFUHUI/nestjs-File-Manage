@@ -1,19 +1,6 @@
 <template>
   <div>
-    <el-row type="flex" style="margin:10px">
-      <el-col>
-        <el-page-header @back="$router.go(-1)" style="line-height:60px" :content="options.title"></el-page-header>
-      </el-col>
-      <el-col style="text-align:right;margin-top:10px">
-        <el-tooltip class="item" content="刷新" placement="top">
-          <el-button type="primary" size="small" icon="el-icon-refresh-right" @click="fetch(1)">刷新</el-button>
-        </el-tooltip>
-        <el-button size="small" type="success" @click="addUser = true">
-          <i class="el-icon-plus"></i>添加
-        </el-button>
-      </el-col>
-    </el-row>
-
+    <h-page-header :content="options.title" @refresh="fetch(1)" @add="addUser = true"></h-page-header>
     <el-table :data="source.data" border stripe>
       <el-table-column type="index" align="center" label="序号" width="50"></el-table-column>
       <el-table-column
@@ -115,6 +102,7 @@
   </div>
 </template>
 <script>
+import hPageHeader from "../components/page_header"
 export default {
   data() {
     return {
@@ -134,7 +122,9 @@ export default {
       addUser: false
     };
   },
-  components: {},
+  components: {
+    hPageHeader
+  },
   methods: {
     async handleCommand() {
       this.optionsDialog = true;

@@ -5,7 +5,7 @@ import { ApiTags, ApiBearerAuth } from '@nestjs/swagger';
 import { AccountService } from './account.service';
 import { AuthGuard } from '@nestjs/passport';
 
-@UseGuards(AuthGuard('jwt'))
+@UseGuards(AuthGuard('admin'))
 @ApiBearerAuth()
 @Crud({
     model:{
@@ -19,6 +19,7 @@ import { AuthGuard } from '@nestjs/passport';
         }
     },
     query:{
+        exclude:["password"],
         join:{
             avatar:{
                 eager:true

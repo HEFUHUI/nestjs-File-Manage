@@ -23,9 +23,6 @@ export class LocalStrategy extends PassportStrategy(Strategy, 'local') {
     if (!compareSync(password, user.password)) {
       throw new UnauthorizedException('用户名或者密码不正确')
     }
-    if(user.Grade>500){
-      throw new UnauthorizedException("请以管理员身份登录");
-    }
     return user;
   }
 }
