@@ -7,7 +7,6 @@ import { AuthGuard } from '@nestjs/passport';
 import { ApiBearerAuth } from '@nestjs/swagger';
 import { Connection } from 'typeorm';
 import { InjectConnection } from '@nestjs/typeorm';
-import { image } from '@libs/db/entity/Image.entity';
 
 const Storage = diskStorage({
   destination(req: Request,
@@ -24,7 +23,7 @@ const Storage = diskStorage({
 
 @Controller("/")
 export class AppController {
-  constructor(private readonly appService: AppService,@InjectConnection() private readonly dbConnection:Connection) {}
+  constructor(private readonly appService: AppService) {}
   @Get("options")
   options(){
     return {
@@ -37,8 +36,8 @@ export class AppController {
   @ApiBearerAuth()
   @Post("upload-cos")
   @UseInterceptors(FileInterceptor("file"))
-  Upload(@UploadedFile("file") file:any){
-    // this.appService.saveImage(req.user.id,file);
+  Upload(@UploadedFile("file") file:any,@Req() req:any){
+    this.appService.saveImage(req.user.id,file);
     return file;
   }
 

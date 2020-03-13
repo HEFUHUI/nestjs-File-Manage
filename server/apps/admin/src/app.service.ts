@@ -1,10 +1,37 @@
 import { Injectable } from '@nestjs/common';
 import { Connection, QueryFailedError } from 'typeorm';
 import { userinfo } from '@libs/db/entity/users.entity';
-import { account } from '@libs/db/entity/Account.entity';
-import { image } from '@libs/db/entity/Image.entity';
+import { account } from '@libs/db/entity/account.entity';
+import { image } from '@libs/db/entity/image.entity';
 import { files } from '@libs/db/entity/files.entity';
+import { label } from '@libs/db/entity/label.entity';
 const Users = require("../../../userinfo.json");
+
+
+
+
+const BasicFileLabel = [
+  {name:"游戏"},
+  {name:"视频"},
+  {name:"浏览器"},
+  {name:"聊天"},
+  {name:"输入法"},
+  {name:"下载"},
+  {name:"音乐"},
+  {name:"图片"},
+  {name:"安全"},
+  {name:"解压刻录"},
+  {name:"系统"},
+  {name:"驱动"},
+  {name:"办公"},
+  {name:"编程"},
+  {name:"股票网银"},
+  {name:"剪辑"},
+  {name:"网络"},
+  {name:"桌面"},
+  {name:"计网出品"},
+]
+
 
 @Injectable()
 export class AppService {
@@ -46,7 +73,7 @@ export class AppService {
           a.email = u.email;
           a.password = u.password[0].password;
           a.motto = u.motto;
-          a.Grade = 500;
+          a.Grade = 4;
           a.like = u.like || null;
           a.createdAt = u.createdAt;
           a.updateAt = u.updateAt;
@@ -54,7 +81,7 @@ export class AppService {
           await this.db.manager.save(a)
           if (u.email === process.env.AdminEmail) {
             //设置管理员
-            await this.db.manager.update(account, { email: process.env.AdminEmail }, { Grade: 0 })
+            await this.db.manager.update(account, { email: process.env.AdminEmail }, { Grade: 10 })
           }
         }
         resolve();
@@ -91,9 +118,17 @@ export class AppService {
     try {
       await this.insertUser()
       await this.insertImage()
+      await this.insertLabel()
     } catch (error) {
       this.lock = true;
     }
+  }
+  insertLabel() {
+    BasicFileLabel.forEach(async l=>{
+      const tag = new label()
+      tag.name = l.name;
+      await this.db.manager.save(tag);
+    })
   }
   set lock(b: boolean) {
     if (b) {

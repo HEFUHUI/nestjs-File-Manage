@@ -2,7 +2,7 @@ import { Strategy, IStrategyOptions } from 'passport-local';
 import { PassportStrategy } from '@nestjs/passport';
 import { UnauthorizedException } from '@nestjs/common';
 import {compareSync} from 'bcrypt'
-import { account } from '@libs/db/entity/Account.entity';
+import { account } from '@libs/db/entity/account.entity';
 import { Connection } from 'typeorm';
 import { InjectConnection } from '@nestjs/typeorm';
 

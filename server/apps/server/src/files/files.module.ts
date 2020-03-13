@@ -6,4 +6,7 @@ import { FilesController } from './files.controller';
   providers: [FilesService],
   controllers: [FilesController]
 })
-export class FilesModule {}
+export class FilesModule {
+  constructor(){
+  }
+}

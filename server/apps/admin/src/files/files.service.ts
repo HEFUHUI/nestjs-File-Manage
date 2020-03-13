@@ -4,7 +4,7 @@ import { files } from '@libs/db/entity/files.entity';
 import { InjectRepository, InjectConnection } from '@nestjs/typeorm';
 import { Override } from '@nestjsx/crud';
 import {DeepPartial, Connection} from "typeorm"
-import { image } from '@libs/db/entity/Image.entity';
+import { image } from '@libs/db/entity/image.entity';
 import { label } from '@libs/db/entity/label.entity';
 
 

@@ -1,8 +1,9 @@
 import { Entity, PrimaryGeneratedColumn, Column, JoinColumn, OneToOne, OneToMany, ManyToOne, ManyToMany } from "typeorm";
 import { userinfo } from "./users.entity";
-import { image } from "./Image.entity";
+import { image } from "./image.entity";
 import { hashSync, compareSync } from "bcrypt"
 import { files } from "./files.entity";
+import { answer } from "./answer.entity";
 
 @Entity()
 export class account {
@@ -21,11 +22,11 @@ export class account {
                     return hashSync(val, 10)
                 }
             }
-        }, select: true
+        }
     })
     password: string
 
-    @Column({ type: "int", default: 1000, name: "Grade", comment: "用户等级" })
+    @Column({ type: "int", default: 0, name: "Grade", comment: "用户等级（0-10）数字越大等级越大" })
     Grade: number
 
     @Column({type:"enum",enum:["enabled","disabled"],name:'state',comment:'账户是否禁用状态'})
@@ -39,6 +40,9 @@ export class account {
     @JoinColumn()
     avatar: image
 
+    @Column({default:0,type:"bit"})
+    isDelete:string
+
     @Column({ comment: "爱好", nullable: true })
     like: string
 
@@ -48,8 +52,9 @@ export class account {
     @Column({ nullable: true })
     socketid: string
 
-    @Column({ type: "bit", default: 0, comment: "状态-在线||离线" })
-    online: boolean
+    @ManyToMany(t=>answer,t=>t.support,{cascade:true})
+    supportAnswer:answer[]
+
 
     @Column({ default: "无名氏" })
     nickName: string

@@ -102,9 +102,9 @@ export default {
   margin-bottom: 3.125rem;
   color: #409eff;
 }
-.el-form-item__label{
+/* .el-form-item__label{
   color: #409eff !important;
-}
+} */
 /* .main button {
     background: #409eff;
     width: 100%;

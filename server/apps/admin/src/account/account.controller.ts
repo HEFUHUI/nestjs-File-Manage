@@ -1,6 +1,6 @@
 import { Controller, Get, UseGuards } from '@nestjs/common';
 import { Crud } from '@nestjsx/crud';
-import { account } from '@libs/db/entity/Account.entity';
+import { account } from '@libs/db/entity/account.entity';
 import { ApiTags, ApiBearerAuth } from '@nestjs/swagger';
 import { AccountService } from './account.service';
 import { AuthGuard } from '@nestjs/passport';
@@ -41,6 +41,14 @@ export class AccountController {
         return {
             title:"账户管理",
             pagination:true,
+            stops:{
+                10:"管理员",
+                8 :"部长",
+                6 :"干部",
+                4 :"成员",
+                2 :"资深游客",
+                0 :"游客",
+            },
             columns: {
                 nickName: {
                     label: "昵称",

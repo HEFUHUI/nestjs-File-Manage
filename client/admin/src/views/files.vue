@@ -22,7 +22,7 @@
           <el-table-column label="文件大小" align="center">
             <template slot-scope="{row}">
               {{Math.floor(row.size/1024)}}
-              <el-tag type="info">KB</el-tag>
+              <el-tag type="info">KB</el-tag>~
             </template>
           </el-table-column>
           <el-table-column prop="type" label="文件类型"></el-table-column>
@@ -261,9 +261,13 @@ export default {
       let author = this.$store.getters.userInfo.id;
       let {
         mimetype: type,
-        originalname: name,
+        originalname,
         size
       } = this.$store.getters.JustUploadFile;
+      let name = originalname.split(".");
+      name.pop();
+      name = name.join(".")
+      console.log(name)
       try {
         await this.$axios.post(`files`, {
           name,

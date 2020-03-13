@@ -1,25 +1,27 @@
-import { Controller, Get, Render, Put, UseGuards, Req, Query } from '@nestjs/common';
-import { InjectConnection } from '@nestjs/typeorm';
-import { Connection } from 'typeorm';
-import { files } from '@libs/db/entity/files.entity';
+import { Controller, Get, Put, UseGuards, Req, Param } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { FilesService } from './files.service';
+import { label } from '@libs/db/entity/label.entity';
 
 @Controller('files')
 export class FilesController {
-    constructor(@InjectConnection() private db:Connection,private readonly service:FilesService){}
+    constructor(private readonly service:FilesService){}
     @Get()
     // @Render("files")
     async get(){
         return {
-            files:[]
-            // files:await this.service.getFiles()
+            files:await this.service.getFiles()
         };
     }
 
-    @Put()
+    @Get("labels")
+    async getLabel():Promise<label[]>{
+        return await this.service.getLabels()
+    }
+
+    @Put("collection/:id")
     @UseGuards(AuthGuard("web"))
-    async collection(@Req() req:any,@Query() query:any){
-        // return await this.service.setCollection(query.fileid,req.user.id);    
+    async collection(@Req() req:any,@Param() param:any){
+        return await this.service.setCollection(param.id,req.user.id);    
     }
 }

@@ -69,7 +69,9 @@ export default {
         {
           title: "系统设置",
           icon: "el-icon-user-solid",
-          children: [{ title: "管理员设置", link: "/admin" }]
+          children: [
+            
+          ]
         }
       ],
       height:window.innerHeight

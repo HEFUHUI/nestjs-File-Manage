@@ -11,6 +11,9 @@ export class department {
     @Column({name:"name",comment:"部门名称"})
     name:string
 
+    @Column({default:0,type:"bit"})
+    isDelete:string
+    
     @OneToOne(t=>userinfo,{nullable:true})
     @JoinColumn()
     leader:userinfo

@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { Module, forwardRef } from '@nestjs/common';
 import { MajorService } from './major.service';
 import { DbModule } from '@libs/db';
 import { ConfigModule } from "@nestjs/config"

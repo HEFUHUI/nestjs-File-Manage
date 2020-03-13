@@ -20,28 +20,35 @@
       <v-btn icon @click.stop="clipped = !clipped">
         <v-icon>mdi-application</v-icon>
       </v-btn>
-      <v-toolbar-title>
-        计算机网络协会
-        <!-- <img height="40px" src="https://hefuhui-1258205592.cos.ap-guangzhou.myqcloud.com/node/3225a568d6b74f82488573af4ede0e6d" alt=""> -->
+      <v-btn icon @click="$router.push('/')">
+        <v-icon>mdi-home</v-icon>
+      </v-btn>
+      <v-toolbar-title v-text="title">
       </v-toolbar-title>
       <v-spacer />
-      <v-btn icon @click.stop="rightDrawer = !rightDrawer">
-        <v-icon>mdi-menu</v-icon>
+      <v-btn fab large @click.stop="rightDrawer = !rightDrawer" v-if="$auth.loggedIn">
+        <v-avatar>
+          <img  :src="/(http|https)/.test($auth.user.avatar.url) ? $auth.user.avatar.url : 'http://'+$auth.user.avatar.url" alt="John" />
+        </v-avatar>
+      </v-btn>
+      <v-btn v-else icon large @click.stop="rightDrawer = !rightDrawer">
+        <v-icon>mdi-account</v-icon>
       </v-btn>
     </v-app-bar>
     <v-content>
-      <v-container>
         <nuxt />
-      </v-container>
     </v-content>
     <v-navigation-drawer width="350" v-model="rightDrawer" right temporary fixed>
-      <v-list v-if="!this.$store.state.auth.loggedIn">
-        <v-btn :to="'/login'" block text>登录\注册</v-btn>
+      <v-list v-if="!$auth.loggedIn">
+        <h-login></h-login>
       </v-list>
       <div v-else>
         <v-row align="center" class="pa-4" justify="center">
           <v-avatar size="100" color="red">
-            <img :src="/(http|https)/.test($auth.user.avatar.url) ? $auth.user.avatar.url : 'http://'+$auth.user.avatar.url" alt="alt" />
+            <img
+              :src="/(http|https)/.test($auth.user.avatar.url) ? $auth.user.avatar.url : 'http://'+$auth.user.avatar.url"
+              alt="alt"
+            />
           </v-avatar>
         </v-row>
         <v-row justify="center">
@@ -77,9 +84,9 @@
           </v-row>
         </v-col>
         <v-row justify="center" :cols="12">
-            <v-btn text color="warning">编辑</v-btn>
-            <v-btn text color="success">个人信息</v-btn>
-            <v-btn text color="red" @click="logout">退出登录</v-btn>
+          <v-btn text color="warning">编辑</v-btn>
+          <v-btn text color="success">个人信息</v-btn>
+          <v-btn text color="red" @click="logout">退出登录</v-btn>
         </v-row>
       </div>
     </v-navigation-drawer>
@@ -90,6 +97,7 @@
 </template>
 
 <script>
+import hLogin from "../components/login";
 export default {
   data() {
     return {
@@ -99,20 +107,23 @@ export default {
       items: [
         {
           icon: "mdi-apps",
-          title: "Welcome",
+          title: "首页",
           to: "/"
         },
         {
           icon: "mdi-chart-bubble",
-          title: "Inspire",
-          to: "/inspire"
+          title: "论坛",
+          to: "/forum"
         }
       ],
       miniVariant: false,
       right: true,
       rightDrawer: false,
-      title: "Vuetify.js"
+      title: "计算机网络协会"
     };
+  },
+  components: {
+    hLogin
   },
   methods: {
     logout() {

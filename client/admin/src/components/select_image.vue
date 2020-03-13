@@ -173,7 +173,6 @@ export default {
     }
   },
   created() {
-    this.$emit("input", "");
     this.fetch();
   }
 };

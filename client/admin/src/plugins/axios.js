@@ -22,7 +22,7 @@ function endloading(){
 }
 
 const _axios = axios.create({
-  baseURL: process.env.baseURL || process.env.apiUrl || "http://localhost:3009",
+  baseURL: process.env.baseURL || process.env.apiUrl || "http://172.16.221.1:3009",
   timeout: 60 * 1000, // Timeout
 });
 
@@ -31,7 +31,9 @@ _axios.interceptors.request.use(
     if(sessionStorage.token){
       config.headers.common['Authorization'] = 'Bearer ' + sessionStorage.token;
     }
-    startloading();
+    if(config.method.toUpperCase() === "GET"){
+      startloading();
+    }
     return config;
   },
   function(error) {

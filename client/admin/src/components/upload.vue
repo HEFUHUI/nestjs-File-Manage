@@ -39,6 +39,8 @@
             <el-input v-model="alias" placeholder="输入别名"></el-input>
           </el-form-item>
         </el-form>
+        <el-image :src="value" :preview-src-list="[value]" alt=""  style="width:200px;height:100px;border-radius:10px" fit="cover"></el-image>
+        <span>示例</span>
       </el-col>
     </el-row>
     <span slot="footer">

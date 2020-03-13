@@ -11,7 +11,7 @@
       }"></h-page-header>
       <el-row>
         <el-col :span="24">
-          <el-checkbox-group v-if="multiple" v-model="checked" @change="$emit('input',checked)">
+          <el-checkbox-group v-if="multiple" v-model="selectds">
             <el-checkbox
               v-for="item in users"
               :disabled="disabled && (item.department || item.leader || item.viceLeader)"
@@ -73,7 +73,7 @@
         </el-col>
       </el-row>
       <span slot="footer">
-        <el-button @click="$emit('update:visible', false)">取 消</el-button>
+        <el-button @click="exit">取 消</el-button>
         <el-button type="primary" @click="enter">确 定</el-button>
       </span>
     </el-dialog>
@@ -104,6 +104,7 @@ export default {
         total: 7,
         page_size: 15
       },
+      selectds:[],
       users: []
     };
   },
@@ -111,6 +112,9 @@ export default {
     hPageHeader
   },
   methods: {
+    exit(){
+      this.$emit('update:visible', false);
+    },
     async fetch(page) {
       const result = await this.$axios.get(
         `users?page=${page}&limit=${this.pagination.page_size}`
@@ -127,6 +131,7 @@ export default {
       this.fetch(this.pagination.currentPage);
     },
     async enter() {
+      this.$emit('input',this.selectds)
       this.$emit("update:visible", false);
       this.$emit("result", this.user);
     }

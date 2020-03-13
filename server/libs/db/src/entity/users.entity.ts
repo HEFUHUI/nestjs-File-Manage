@@ -1,14 +1,17 @@
 import { Entity, PrimaryGeneratedColumn, Column, JoinColumn, OneToOne, ManyToOne, OneToMany } from "typeorm";
 import { department } from "./department.entity";
-import { image } from "./Image.entity";
+import { image } from "./image.entity";
 import { ApiProperty } from "@nestjs/swagger";
-import { account } from "./Account.entity";
+import { account } from "./account.entity";
 import { JoinAttribute } from "typeorm/query-builder/JoinAttribute";
 
 @Entity()
 export class userinfo{
     @PrimaryGeneratedColumn("uuid")
     id:string
+
+    @Column({default:0,type:"bit"})
+    isDelete:string
 
     @ApiProperty()
     @Column()

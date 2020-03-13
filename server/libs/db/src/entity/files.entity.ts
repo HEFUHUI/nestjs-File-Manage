@@ -1,9 +1,8 @@
 import { Entity, PrimaryGeneratedColumn, Column, JoinColumn, OneToOne, OneToMany, ManyToOne, ManyToMany, JoinTable } from "typeorm";
-import { userinfo } from "./users.entity";
 import { ApiProperty } from "@nestjs/swagger";
-import { image } from "./Image.entity";
+import { image } from "./image.entity";
 import { label } from "./label.entity";
-import { account } from "./Account.entity";
+import { account } from "./account.entity";
 
 @Entity()
 export class files{
@@ -17,10 +16,15 @@ export class files{
     @Column({nullable:true,default:'exe'})
     type:string
 
+    @Column({default:0,type:"bit"})
+    isDelete:string
+
     @Column({default:"private",enum:["public","private"],type:"enum"})
     share:string
 
-    @Column({type:"bigint",default:0})
+    @Column({type:"bigint",default:0,transformer:{to:()=>{},from:(val)=>{
+        return val/1024/1024+"M"
+    }}})
     size:number
 
     @Column({name:"name",nullable:true})

@@ -1,0 +1,140 @@
+TSError: ⨯ Unable to compile TypeScript:
+nestjs-File-Manage/server/apps/server/src/app.module.ts(4,29): error TS2307: Cannot find module '@libs/major'.
+nestjs-File-Manage/server/apps/server/src/app.module.ts(13,14): error TS1219: Experimental support for decorators is a feature that is subject to change in a future release. Set the 'experimentalDecorators' option in your 'tsconfig' or 'jsconfig' to remove this warning.
+
+    at createTSError (/usr/lib/node_modules/pm2/node_modules/ts-node/src/index.ts:421:12)
+    at reportTSError (/usr/lib/node_modules/pm2/node_modules/ts-node/src/index.ts:425:19)
+    at getOutput (/usr/lib/node_modules/pm2/node_modules/ts-node/src/index.ts:530:36)
+    at Object.compile (/usr/lib/node_modules/pm2/node_modules/ts-node/src/index.ts:735:32)
+    at Module.m._compile (/usr/lib/node_modules/pm2/node_modules/ts-node/src/index.ts:814:43)
+    at Module._extensions..js (internal/modules/cjs/loader.js:1171:10)
+    at Object.require.extensions.<computed> [as .ts] (/usr/lib/node_modules/pm2/node_modules/ts-node/src/index.ts:817:12)
+    at Module.load (internal/modules/cjs/loader.js:1000:32)
+    at Function.Module._load (internal/modules/cjs/loader.js:899:14)
+    at Module.require (internal/modules/cjs/loader.js:1040:19)
+TSError: ⨯ Unable to compile TypeScript:
+nestjs-File-Manage/server/apps/server/src/app.module.ts(4,29): error TS2307: Cannot find module '@libs/major'.
+nestjs-File-Manage/server/apps/server/src/app.module.ts(13,14): error TS1219: Experimental support for decorators is a feature that is subject to change in a future release. Set the 'experimentalDecorators' option in your 'tsconfig' or 'jsconfig' to remove this warning.
+
+    at createTSError (/usr/lib/node_modules/pm2/node_modules/ts-node/src/index.ts:421:12)
+    at reportTSError (/usr/lib/node_modules/pm2/node_modules/ts-node/src/index.ts:425:19)
+    at getOutput (/usr/lib/node_modules/pm2/node_modules/ts-node/src/index.ts:530:36)
+    at Object.compile (/usr/lib/node_modules/pm2/node_modules/ts-node/src/index.ts:735:32)
+    at Module.m._compile (/usr/lib/node_modules/pm2/node_modules/ts-node/src/index.ts:814:43)
+    at Module._extensions..js (internal/modules/cjs/loader.js:1171:10)
+    at Object.require.extensions.<computed> [as .ts] (/usr/lib/node_modules/pm2/node_modules/ts-node/src/index.ts:817:12)
+    at Module.load (internal/modules/cjs/loader.js:1000:32)
+    at Function.Module._load (internal/modules/cjs/loader.js:899:14)
+    at Module.require (internal/modules/cjs/loader.js:1040:19)
+TSError: ⨯ Unable to compile TypeScript:
+nestjs-File-Manage/server/apps/server/src/app.module.ts(4,29): error TS2307: Cannot find module '@libs/major'.
+nestjs-File-Manage/server/apps/server/src/app.module.ts(13,14): error TS1219: Experimental support for decorators is a feature that is subject to change in a future release. Set the 'experimentalDecorators' option in your 'tsconfig' or 'jsconfig' to remove this warning.
+
+    at createTSError (/usr/lib/node_modules/pm2/node_modules/ts-node/src/index.ts:421:12)
+    at reportTSError (/usr/lib/node_modules/pm2/node_modules/ts-node/src/index.ts:425:19)
+    at getOutput (/usr/lib/node_modules/pm2/node_modules/ts-node/src/index.ts:530:36)
+    at Object.compile (/usr/lib/node_modules/pm2/node_modules/ts-node/src/index.ts:735:32)
+    at Module.m._compile (/usr/lib/node_modules/pm2/node_modules/ts-node/src/index.ts:814:43)
+    at Module._extensions..js (internal/modules/cjs/loader.js:1171:10)
+    at Object.require.extensions.<computed> [as .ts] (/usr/lib/node_modules/pm2/node_modules/ts-node/src/index.ts:817:12)
+    at Module.load (internal/modules/cjs/loader.js:1000:32)
+    at Function.Module._load (internal/modules/cjs/loader.js:899:14)
+    at Module.require (internal/modules/cjs/loader.js:1040:19)
+TSError: ⨯ Unable to compile TypeScript:
+nestjs-File-Manage/server/apps/server/src/app.module.ts(4,29): error TS2307: Cannot find module '@libs/major'.
+nestjs-File-Manage/server/apps/server/src/app.module.ts(13,14): error TS1219: Experimental support for decorators is a feature that is subject to change in a future release. Set the 'experimentalDecorators' option in your 'tsconfig' or 'jsconfig' to remove this warning.
+
+    at createTSError (/usr/lib/node_modules/pm2/node_modules/ts-node/src/index.ts:421:12)
+    at reportTSError (/usr/lib/node_modules/pm2/node_modules/ts-node/src/index.ts:425:19)
+    at getOutput (/usr/lib/node_modules/pm2/node_modules/ts-node/src/index.ts:530:36)
+    at Object.compile (/usr/lib/node_modules/pm2/node_modules/ts-node/src/index.ts:735:32)
+    at Module.m._compile (/usr/lib/node_modules/pm2/node_modules/ts-node/src/index.ts:814:43)
+    at Module._extensions..js (internal/modules/cjs/loader.js:1171:10)
+    at Object.require.extensions.<computed> [as .ts] (/usr/lib/node_modules/pm2/node_modules/ts-node/src/index.ts:817:12)
+    at Module.load (internal/modules/cjs/loader.js:1000:32)
+    at Function.Module._load (internal/modules/cjs/loader.js:899:14)
+    at Module.require (internal/modules/cjs/loader.js:1040:19)
+TSError: ⨯ Unable to compile TypeScript:
+nestjs-File-Manage/server/apps/server/src/app.module.ts(4,29): error TS2307: Cannot find module '@libs/major'.
+nestjs-File-Manage/server/apps/server/src/app.module.ts(13,14): error TS1219: Experimental support for decorators is a feature that is subject to change in a future release. Set the 'experimentalDecorators' option in your 'tsconfig' or 'jsconfig' to remove this warning.
+
+    at createTSError (/usr/lib/node_modules/pm2/node_modules/ts-node/src/index.ts:421:12)
+    at reportTSError (/usr/lib/node_modules/pm2/node_modules/ts-node/src/index.ts:425:19)
+    at getOutput (/usr/lib/node_modules/pm2/node_modules/ts-node/src/index.ts:530:36)
+    at Object.compile (/usr/lib/node_modules/pm2/node_modules/ts-node/src/index.ts:735:32)
+    at Module.m._compile (/usr/lib/node_modules/pm2/node_modules/ts-node/src/index.ts:814:43)
+    at Module._extensions..js (internal/modules/cjs/loader.js:1171:10)
+    at Object.require.extensions.<computed> [as .ts] (/usr/lib/node_modules/pm2/node_modules/ts-node/src/index.ts:817:12)
+    at Module.load (internal/modules/cjs/loader.js:1000:32)
+    at Function.Module._load (internal/modules/cjs/loader.js:899:14)
+    at Module.require (internal/modules/cjs/loader.js:1040:19)
+TSError: ⨯ Unable to compile TypeScript:
+nestjs-File-Manage/server/apps/server/src/app.module.ts(4,29): error TS2307: Cannot find module '@libs/major'.
+nestjs-File-Manage/server/apps/server/src/app.module.ts(13,14): error TS1219: Experimental support for decorators is a feature that is subject to change in a future release. Set the 'experimentalDecorators' option in your 'tsconfig' or 'jsconfig' to remove this warning.
+
+    at createTSError (/usr/lib/node_modules/pm2/node_modules/ts-node/src/index.ts:421:12)
+    at reportTSError (/usr/lib/node_modules/pm2/node_modules/ts-node/src/index.ts:425:19)
+    at getOutput (/usr/lib/node_modules/pm2/node_modules/ts-node/src/index.ts:530:36)
+    at Object.compile (/usr/lib/node_modules/pm2/node_modules/ts-node/src/index.ts:735:32)
+    at Module.m._compile (/usr/lib/node_modules/pm2/node_modules/ts-node/src/index.ts:814:43)
+    at Module._extensions..js (internal/modules/cjs/loader.js:1171:10)
+    at Object.require.extensions.<computed> [as .ts] (/usr/lib/node_modules/pm2/node_modules/ts-node/src/index.ts:817:12)
+    at Module.load (internal/modules/cjs/loader.js:1000:32)
+    at Function.Module._load (internal/modules/cjs/loader.js:899:14)
+    at Module.require (internal/modules/cjs/loader.js:1040:19)
+TSError: ⨯ Unable to compile TypeScript:
+nestjs-File-Manage/server/apps/server/src/app.module.ts(4,29): error TS2307: Cannot find module '@libs/major'.
+nestjs-File-Manage/server/apps/server/src/app.module.ts(13,14): error TS1219: Experimental support for decorators is a feature that is subject to change in a future release. Set the 'experimentalDecorators' option in your 'tsconfig' or 'jsconfig' to remove this warning.
+
+    at createTSError (/usr/lib/node_modules/pm2/node_modules/ts-node/src/index.ts:421:12)
+    at reportTSError (/usr/lib/node_modules/pm2/node_modules/ts-node/src/index.ts:425:19)
+    at getOutput (/usr/lib/node_modules/pm2/node_modules/ts-node/src/index.ts:530:36)
+    at Object.compile (/usr/lib/node_modules/pm2/node_modules/ts-node/src/index.ts:735:32)
+    at Module.m._compile (/usr/lib/node_modules/pm2/node_modules/ts-node/src/index.ts:814:43)
+    at Module._extensions..js (internal/modules/cjs/loader.js:1171:10)
+    at Object.require.extensions.<computed> [as .ts] (/usr/lib/node_modules/pm2/node_modules/ts-node/src/index.ts:817:12)
+    at Module.load (internal/modules/cjs/loader.js:1000:32)
+    at Function.Module._load (internal/modules/cjs/loader.js:899:14)
+    at Module.require (internal/modules/cjs/loader.js:1040:19)
+TSError: ⨯ Unable to compile TypeScript:
+nestjs-File-Manage/server/apps/server/src/app.module.ts(4,29): error TS2307: Cannot find module '@libs/major'.
+nestjs-File-Manage/server/apps/server/src/app.module.ts(13,14): error TS1219: Experimental support for decorators is a feature that is subject to change in a future release. Set the 'experimentalDecorators' option in your 'tsconfig' or 'jsconfig' to remove this warning.
+
+    at createTSError (/usr/lib/node_modules/pm2/node_modules/ts-node/src/index.ts:421:12)
+    at reportTSError (/usr/lib/node_modules/pm2/node_modules/ts-node/src/index.ts:425:19)
+    at getOutput (/usr/lib/node_modules/pm2/node_modules/ts-node/src/index.ts:530:36)
+    at Object.compile (/usr/lib/node_modules/pm2/node_modules/ts-node/src/index.ts:735:32)
+    at Module.m._compile (/usr/lib/node_modules/pm2/node_modules/ts-node/src/index.ts:814:43)
+    at Module._extensions..js (internal/modules/cjs/loader.js:1171:10)
+    at Object.require.extensions.<computed> [as .ts] (/usr/lib/node_modules/pm2/node_modules/ts-node/src/index.ts:817:12)
+    at Module.load (internal/modules/cjs/loader.js:1000:32)
+    at Function.Module._load (internal/modules/cjs/loader.js:899:14)
+    at Module.require (internal/modules/cjs/loader.js:1040:19)
+TSError: ⨯ Unable to compile TypeScript:
+nestjs-File-Manage/server/apps/server/src/app.module.ts(4,29): error TS2307: Cannot find module '@libs/major'.
+nestjs-File-Manage/server/apps/server/src/app.module.ts(13,14): error TS1219: Experimental support for decorators is a feature that is subject to change in a future release. Set the 'experimentalDecorators' option in your 'tsconfig' or 'jsconfig' to remove this warning.
+
+    at createTSError (/usr/lib/node_modules/pm2/node_modules/ts-node/src/index.ts:421:12)
+    at reportTSError (/usr/lib/node_modules/pm2/node_modules/ts-node/src/index.ts:425:19)
+    at getOutput (/usr/lib/node_modules/pm2/node_modules/ts-node/src/index.ts:530:36)
+    at Object.compile (/usr/lib/node_modules/pm2/node_modules/ts-node/src/index.ts:735:32)
+    at Module.m._compile (/usr/lib/node_modules/pm2/node_modules/ts-node/src/index.ts:814:43)
+    at Module._extensions..js (internal/modules/cjs/loader.js:1171:10)
+    at Object.require.extensions.<computed> [as .ts] (/usr/lib/node_modules/pm2/node_modules/ts-node/src/index.ts:817:12)
+    at Module.load (internal/modules/cjs/loader.js:1000:32)
+    at Function.Module._load (internal/modules/cjs/loader.js:899:14)
+    at Module.require (internal/modules/cjs/loader.js:1040:19)
+TSError: ⨯ Unable to compile TypeScript:
+nestjs-File-Manage/server/apps/server/src/app.module.ts(4,29): error TS2307: Cannot find module '@libs/major'.
+nestjs-File-Manage/server/apps/server/src/app.module.ts(13,14): error TS1219: Experimental support for decorators is a feature that is subject to change in a future release. Set the 'experimentalDecorators' option in your 'tsconfig' or 'jsconfig' to remove this warning.
+
+    at createTSError (/usr/lib/node_modules/pm2/node_modules/ts-node/src/index.ts:421:12)
+    at reportTSError (/usr/lib/node_modules/pm2/node_modules/ts-node/src/index.ts:425:19)
+    at getOutput (/usr/lib/node_modules/pm2/node_modules/ts-node/src/index.ts:530:36)
+    at Object.compile (/usr/lib/node_modules/pm2/node_modules/ts-node/src/index.ts:735:32)
+    at Module.m._compile (/usr/lib/node_modules/pm2/node_modules/ts-node/src/index.ts:814:43)
+    at Module._extensions..js (internal/modules/cjs/loader.js:1171:10)
+    at Object.require.extensions.<computed> [as .ts] (/usr/lib/node_modules/pm2/node_modules/ts-node/src/index.ts:817:12)
+    at Module.load (internal/modules/cjs/loader.js:1000:32)
+    at Function.Module._load (internal/modules/cjs/loader.js:899:14)
+    at Module.require (internal/modules/cjs/loader.js:1040:19)

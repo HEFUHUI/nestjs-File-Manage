@@ -1,7 +1,8 @@
 <template>
   <div>
-    <h-page-header :content="options.title" @refresh="fetch(1)" @add="addDialog = true"></h-page-header>
+    <h-page-header :content="options.title" @refresh="fetch(1)" @add="addDialog = true;source = {}"></h-page-header>
     <el-table :data="sources" border stripe>
+      <el-table-column type="selection" align="center" width="55"></el-table-column>
       <el-table-column type="index" align="center" label="序号" width="50"></el-table-column>
       <el-table-column
         v-for="(item,index) in options.columns"
@@ -12,7 +13,9 @@
         :width="options.columns[index].width"
       ></el-table-column>
       <el-table-column align="center" label="部门人数">
-        <template slot-scope="{row}">{{row.users.length+2}}</template>
+        <template
+          slot-scope="{row}"
+        >{{row.users.length+(row.leader ? 1 : 0)+(row.viceLeader ? 1 : 0)}}</template>
       </el-table-column>
       <el-table-column align="center" label="部长">
         <template slot-scope="{row}">{{row.leader ? row.leader.name : "无部长"}}</template>
@@ -31,7 +34,7 @@
               </li>
               <li>
                 <span style="color:#409eff">部门人数</span>
-                ：{{row.users.length+2}}
+                ：{{row.users.length+(row.leader ? 1 : 0)+(row.viceLeader ? 1 : 0)}}
                 <el-divider content-position="right">count</el-divider>
               </li>
               <li>
@@ -60,7 +63,7 @@
           </el-popover>
           <el-divider direction="vertical"></el-divider>
           <el-popover placement="bottom-start" :title="row.name" width="300" trigger="hover">
-            <el-button type="primary" slot="reference" @click="handleCommand(row)" size="small">选项</el-button>
+            <el-button type="primary" slot="reference" @click="openOptions(row)" size="small">选项</el-button>
             <el-button-group>
               <el-button type="warning" icon="el-icon-edit" @click="editDialog=true;source=row"></el-button>
               <el-button type="primary" @click="addUser(row)">添加成员</el-button>
@@ -76,12 +79,22 @@
           <el-input v-model="source.name" placeholder="磨铁部"></el-input>
         </el-form-item>
         <el-form-item label="部长">
-          <h-user-select  :disabled="true" :multiple="false" :visible.sync="select_leader" v-model="source.leader">
+          <h-user-select
+            :disabled="true"
+            :multiple="false"
+            :visible.sync="select_leader"
+            v-model="source.leader"
+          >
             <el-button type="primary" @click="select_leader = true" slot="active" size="mini">选择</el-button>
           </h-user-select>
         </el-form-item>
         <el-form-item label="副部长">
-          <h-user-select  :disabled="true" :multiple="false" :visible.sync="select_viceLeader" v-model="source.viceLeader">
+          <h-user-select
+            :disabled="true"
+            :multiple="false"
+            :visible.sync="select_viceLeader"
+            v-model="source.viceLeader"
+          >
             <el-button type="primary" @click="select_viceLeader = true" slot="active" size="mini">选择</el-button>
           </h-user-select>
         </el-form-item>
@@ -95,7 +108,8 @@
       <ele-form :formData="source" :formDesc="options.columns" :request-fn="edit"></ele-form>
     </el-dialog>
     <el-dialog title="选项" :visible.sync="optionsDialog" width="50%">
-      <el-table :data="source.users" border stripe>
+      <el-table :data="source.users" border stripe @selection-change="handleSelectionChange">
+        <el-table-column type="selection" align="center" width="55"></el-table-column>
         <el-table-column label="姓名" prop="name"></el-table-column>
         <el-table-column label="班级" prop="class"></el-table-column>
         <el-table-column label="系别" prop="tie"></el-table-column>
@@ -127,22 +141,21 @@
   </div>
 </template>
 <script>
-import hPageHeader from "../components/page_header"
+import hPageHeader from "../components/page_header";
 import hUserSelect from "../components/select_user";
 export default {
   data() {
     return {
-      select_leader:false,
+      select_leader: false,
       optionsDialog: false,
       editDialog: false,
       source: {},
       select_user: false,
-      select_viceLeader:false,
+      select_viceLeader: false,
       sources: [],
       select_users: [],
-      options: { tieOptions: [], columns: {}, title: "" },
-      addDialog: false,
-      users: []
+      options: { columns: {}, title: "管理" },
+      addDialog: false
     };
   },
   components: {
@@ -151,18 +164,22 @@ export default {
   },
   computed: {},
   methods: {
-    async handleCommand(row) {
+    handleSelectionChange(val){
+      console.log(val);
+    },
+    async openOptions(row) {
       this.source = row;
       this.optionsDialog = true;
     },
     async PushUser() {
-      this.select_users.forEach(async element => {
+      await this.select_users.forEach(async element => {
         await this.$axios.put(`users/${element.id}`, {
           department: this.source.id
         });
+        this.select_users = [];
         this.alert_success(`已添加${element.name}到${this.source.name}`);
-        this.fetch()
       });
+      this.fetch();
     },
     async addUser(source) {
       this.source = source;
@@ -200,7 +217,6 @@ export default {
       this.editDialog = false;
     },
     async fetch() {
-      this.users = (await this.$axios.get(`users`)).data;
       this.options = (await this.$axios.get(`departments/options`)).data;
       this.sources = (await this.$axios.get(`departments`)).data;
     }

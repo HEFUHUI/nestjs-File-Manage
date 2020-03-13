@@ -11,6 +11,9 @@ export class label{
     @Column()
     name:string
 
+    @Column({default:0,type:"bit"})
+    isDelete:string
+
     @ManyToMany(t=>files,t=>t.label,{cascade:true})
     file:files[]
 

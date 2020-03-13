@@ -1,9 +1,10 @@
 import { Controller, UseGuards, Get } from '@nestjs/common';
 import { Crud } from '@nestjsx/crud';
-import { image } from '@libs/db/entity/Image.entity';
+import { image } from '@libs/db/entity/image.entity';
 import { ApiTags, ApiBearerAuth } from '@nestjs/swagger';
 import { ImagesService } from './images.service';
 import { AuthGuard } from '@nestjs/passport';
+import { MajorService } from '@libs/major';
 
 @UseGuards(AuthGuard('admin'))
 @ApiBearerAuth()
@@ -31,9 +32,9 @@ import { AuthGuard } from '@nestjs/passport';
 @ApiTags("图片管理")
 @Controller('images')
 export class ImagesController {
-    constructor(public service:ImagesService){}
+    constructor(public service:ImagesService,private majorService:MajorService){}
     @Get("cos")
     async getCosImg(){
-      return  await this.service.getCosImg(); 
+      return await this.majorService.getCosImg()
     }
 }

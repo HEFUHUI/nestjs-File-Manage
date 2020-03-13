@@ -4,10 +4,13 @@ import { AppService } from './app.service';
 import { MajorModule } from '@libs/major';
 import { EventsGateway } from './events.gateway';
 import { FilesModule } from './files/files.module';
+import { ProblemModule } from './problem/problem.module';
 
 @Module({
-  imports: [MajorModule, FilesModule],
+  imports: [MajorModule,FilesModule, ProblemModule],
   controllers: [AppController],
   providers: [AppService, EventsGateway],
 })
-export class AppModule {}
+export class AppModule {
+  constructor(){}
+}
