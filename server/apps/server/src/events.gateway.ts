@@ -1,20 +1,24 @@
-import { SubscribeMessage, WebSocketGateway, WebSocketServer, WsResponse } from '@nestjs/websockets';
-import { Observable, of } from 'rxjs';
+import {  OnGatewayConnection, WebSocketGateway,WebSocketServer, WsResponse, OnGatewayDisconnect, OnGatewayInit } from '@nestjs/websockets';
+import { Socket ,Server} from 'socket.io';
+import { JsonWebTokenError} from "jsonwebtoken"
+import { AppService } from "./app.service";
 
-let num = 0;
+@WebSocketGateway({path:'/web'})
+export class EventsGateway implements OnGatewayConnection,OnGatewayDisconnect,OnGatewayInit{
+  constructor(private service:AppService){}
+  afterInit(server: any) {}
 
-
-@WebSocketGateway()
-export class EventsGateway {
-  @SubscribeMessage('events')
-  onEvent(client: any, payload: any): Observable<WsResponse<any>> {
-    num++
-    console.log(`有一位用户链接!> ${num}`);
-    client.on('disconnect', () => {
-      num--
-      console.log(`有人离开了...> ${num}`);
-    })
-    return of({event:"hello",data:"sadasd"})
-    // return of({ event: 'message', data: '233' });
+  handleDisconnect(client:Socket) {
+    this.service.offline(client.id);
   }
+
+  handleConnection(client:Socket) {
+    this.service.checkToken(this.service.getToken(client.request.url as string)).then((payload:any)=>{
+      this.service.online(payload.id,client.id);
+    }).catch((err:JsonWebTokenError)=>{
+      console.log(err.message)
+    })
+  }
+
+  @WebSocketServer() server:Server
 }

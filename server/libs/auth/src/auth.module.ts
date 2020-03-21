@@ -18,6 +18,7 @@ import { MajorModule } from '@libs/major';
     }
   })],
   controllers: [AuthController],
-  providers: [AuthService,LocalStrategy,JwtStrategy,MyGuards]
+  providers: [AuthService,LocalStrategy,JwtStrategy,MyGuards],
+  exports:[JwtModule]
 })
 export class AuthModule {}

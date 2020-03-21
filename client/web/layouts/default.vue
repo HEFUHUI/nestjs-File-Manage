@@ -14,78 +14,40 @@
     </v-navigation-drawer>
     <v-app-bar :clipped-left="clipped" fixed app>
       <v-app-bar-nav-icon @click.stop="drawer = !drawer" />
-      <v-btn icon @click.stop="miniVariant = !miniVariant">
+      <v-btn icon @click.stop="miniVariant = !miniVariant" class="d-none d-sm-flex">
         <v-icon>mdi-{{ `chevron-${miniVariant ? 'right' : 'left'}` }}</v-icon>
       </v-btn>
-      <v-btn icon @click.stop="clipped = !clipped">
+      <v-btn icon @click.stop="clipped = !clipped" class="d-none d-sm-flex">
         <v-icon>mdi-application</v-icon>
       </v-btn>
-      <v-btn icon @click="$router.push('/')">
+      <v-btn icon @click="$router.push('/')" class="d-none d-sm-flex">
         <v-icon>mdi-home</v-icon>
       </v-btn>
-      <v-toolbar-title v-text="title">
-      </v-toolbar-title>
+      <v-toolbar-title v-text="title"></v-toolbar-title>
       <v-spacer />
-      <v-btn fab large @click.stop="rightDrawer = !rightDrawer" v-if="$auth.loggedIn">
+      <v-btn fab @click.stop="rightDrawer = !rightDrawer" v-if="$auth.loggedIn">
         <v-avatar>
-          <img  :src="/(http|https)/.test($auth.user.avatar.url) ? $auth.user.avatar.url : 'http://'+$auth.user.avatar.url" alt="John" />
+          <img :src="$auth.user.avatar.url" />
         </v-avatar>
       </v-btn>
-      <v-btn v-else icon large @click.stop="rightDrawer = !rightDrawer">
+      <v-btn v-else icon @click.stop="rightDrawer = !rightDrawer">
         <v-icon>mdi-account</v-icon>
       </v-btn>
     </v-app-bar>
     <v-content>
-        <nuxt />
+      <nuxt />
+      <FloatingActionButton></FloatingActionButton>
     </v-content>
     <v-navigation-drawer width="350" v-model="rightDrawer" right temporary fixed>
       <v-list v-if="!$auth.loggedIn">
         <h-login></h-login>
       </v-list>
       <div v-else>
-        <v-row align="center" class="pa-4" justify="center">
-          <v-avatar size="100" color="red">
-            <img
-              :src="/(http|https)/.test($auth.user.avatar.url) ? $auth.user.avatar.url : 'http://'+$auth.user.avatar.url"
-              alt="alt"
-            />
-          </v-avatar>
-        </v-row>
-        <v-row justify="center">
-          <div>
-            <v-col :cols="12">
-              <v-row justify="center">
-                <h3>{{$auth.user.nickName}}</h3>
-              </v-row>
-              <v-row justify="center">
-                <h4>{{$auth.user.email}}</h4>
-              </v-row>
-            </v-col>
-          </div>
-        </v-row>
-        <v-divider></v-divider>
-        <v-col>
-          <v-row>
-            <v-list two-line subheader>
-              <v-subheader>账户信息</v-subheader>
-              <v-list-item>
-                <v-list-item-content>
-                  <v-list-item-title>兴趣爱好</v-list-item-title>
-                  <v-list-item-subtitle v-text="$auth.user.like"></v-list-item-subtitle>
-                </v-list-item-content>
-              </v-list-item>
-              <v-list-item>
-                <v-list-item-content>
-                  <v-list-item-title>座右铭</v-list-item-title>
-                  <v-list-item-subtitle v-text="$auth.user.motto"></v-list-item-subtitle>
-                </v-list-item-content>
-              </v-list-item>
-            </v-list>
-          </v-row>
-        </v-col>
+        <h-account-center :id="$auth.user.id" :self="true"></h-account-center>
         <v-row justify="center" :cols="12">
-          <v-btn text color="warning">编辑</v-btn>
-          <v-btn text color="success">个人信息</v-btn>
+          <v-btn text color="warning" @click="editDialog = true">编辑</v-btn>
+          <v-btn text color="success" v-if="$auth.user.info">我的社团</v-btn>
+          <v-btn color="success" v-else text>加入社团</v-btn>
           <v-btn text color="red" @click="logout">退出登录</v-btn>
         </v-row>
       </div>
@@ -93,10 +55,34 @@
     <v-footer :fixed="fixed" app>
       <span>&copy; {{ new Date().getFullYear() }}</span>
     </v-footer>
+    <v-dialog
+      v-model="editDialog"
+      persistent
+      :overlay="false"
+      max-width="800px"
+      transition="slide-y-transition"
+    >
+      <v-card>
+        <v-card-title primary-title>编辑我的账户信息</v-card-title>
+        <v-card-subtitle>账号注册时间：{{$auth.loggedIn && $auth.user.createdAt}}</v-card-subtitle>
+        <v-card-text>
+          <v-form ref="user" lazy-validation>
+            <v-text-field v-model="user.nickName" label="昵称"></v-text-field>
+            <v-text-field v-model="user.motto" label="座右铭"></v-text-field>
+            <v-text-field v-model="user.like" label="爱好"></v-text-field>
+          </v-form>
+        </v-card-text>
+        <v-card-actions>
+          <v-btn color="info" @click="editDialog = false" text>关闭</v-btn>
+          <v-btn color="warning" @click="commitChange" text>提交更改</v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
   </v-app>
 </template>
-
 <script>
+import hAccountCenter from "../components/accountCenter";
+import FloatingActionButton from "../components/FloatingActionButton";
 import hLogin from "../components/login";
 export default {
   data() {
@@ -104,6 +90,7 @@ export default {
       clipped: false,
       drawer: false,
       fixed: false,
+      editDialog: false,
       items: [
         {
           icon: "mdi-apps",
@@ -114,18 +101,52 @@ export default {
           icon: "mdi-chart-bubble",
           title: "论坛",
           to: "/forum"
+        },
+        {
+          icon: "mdi-file",
+          title: "文件下载",
+          to: "/files"
         }
       ],
       miniVariant: false,
       right: true,
+      user: {
+        nickName: "",
+        motto: "",
+        like: ""
+      },
       rightDrawer: false,
-      title: "计算机网络协会"
+      title: "计算机网络协会",
+      valid: true
     };
   },
-  components: {
-    hLogin
+  watch: {
+    editDialog(val) {
+      if (val) {
+        Object.assign(this.user, this.$auth.user); //拷贝一份用户信息到本组件
+      }
+    }
   },
+  components: {
+    FloatingActionButton,
+    hLogin,
+    hAccountCenter
+  },
+  sockets: {
+    connect() {
+      console.log("连接成功");
+    }
+  },
+  mounted() {},
   methods: {
+    async commitChange() {
+      await this.$axios.put("changeUser", {
+        nickName: this.user.nickName,
+        motto: this.user.motto,
+        like: this.user.like
+      });
+      this.editDialog = false;
+    },
     logout() {
       this.$auth.logout();
     }

@@ -12,14 +12,20 @@ export class label{
     name:string
 
     @Column({default:0,type:"bit"})
-    isDelete:string
+    isDelete:number
 
     @ManyToMany(t=>files,t=>t.label,{cascade:true})
     file:files[]
 
-    @Column({onUpdate:"CURRENT_TIMESTAMP",default:()=>"CURRENT_TIMESTAMP",name:"update_at",type:'timestamp'})
+    @UpdateDateColumn({transformer:{
+        from:val=>new Date(val).toLocaleString(),
+        to:val=>val
+    }})
     updateAt:Date
 
-    @Column("timestamp",{default:()=>"CURRENT_TIMESTAMP",name:"created_at"})
+    @CreateDateColumn({transformer:{
+        from:val=>new Date(val).toLocaleString(),
+        to:val=>val
+    }})
     createdAt:Date
 }

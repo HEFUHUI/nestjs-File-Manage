@@ -1,4 +1,4 @@
-import { Entity, Column, PrimaryGeneratedColumn, OneToMany, JoinColumn, OneToOne, ManyToOne } from "typeorm";
+import { Entity, Column, PrimaryGeneratedColumn, OneToMany, JoinColumn, OneToOne, ManyToOne, CreateDateColumn, UpdateDateColumn } from "typeorm";
 import { userinfo } from "./users.entity";
 import { ApiProperty } from "@nestjs/swagger";
 
@@ -12,7 +12,7 @@ export class department {
     name:string
 
     @Column({default:0,type:"bit"})
-    isDelete:string
+    isDelete:number
     
     @OneToOne(t=>userinfo,{nullable:true})
     @JoinColumn()
@@ -22,11 +22,17 @@ export class department {
     @JoinColumn()
     viceLeader:userinfo
 
-    @Column({onUpdate:"CURRENT_TIMESTAMP",default:()=>"CURRENT_TIMESTAMP",name:"update_at",type:'timestamp'})
+    @UpdateDateColumn({transformer:{
+        from:val=>new Date(val).toLocaleString(),
+        to:val=>val
+    }})
     updateAt:Date
 
-    @Column("timestamp",{default:()=>"CURRENT_TIMESTAMP",name:"created_at"})
-    createdAt:Date
+    @CreateDateColumn({transformer:{
+        from:val=>new Date(val).toLocaleString(),
+        to:val=>val
+    }})
+    createdAt:number
 
     @OneToMany(t=>userinfo,t=>t.department)
     @JoinColumn({name:"user_id"})

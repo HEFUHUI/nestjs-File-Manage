@@ -1,4 +1,4 @@
-import { Entity, PrimaryGeneratedColumn, Column, JoinColumn, ManyToOne, OneToMany, CreateDateColumn, UpdateDateColumn } from "typeorm";
+import { Entity, PrimaryGeneratedColumn, Column, JoinColumn, ManyToOne, OneToMany, CreateDateColumn, UpdateDateColumn, ManyToMany, JoinTable } from "typeorm";
 import { account } from "./account.entity";
 import { answer } from "./answer.entity";
 
@@ -14,19 +14,40 @@ export class problem{
     @OneToMany(t=>answer,t=>t.proplem)
     answer:answer[]
 
-    @Column({nullable:true})
+    @ManyToMany(t=>account,t=>t.support)
+    @JoinTable({
+        name:"support_problem",
+        joinColumns:[
+            {name:"problem"}
+        ],
+        inverseJoinColumns:[
+            {name:'support'}
+        ]
+    })
+    support:account[]
+
+    @Column({nullable:true,type:"text"})
     ex_img:string
 
     @Column({default:0,type:"bit"})
-    isDelete:string
+    isDelete:number
+
+    @Column("varchar",{nullable:false,default:'计算机'})
+    topic:string
 
     @ManyToOne(t=>account,t=>t.id,{nullable:false})
     @JoinColumn()
     author:account
 
-    @UpdateDateColumn()
+    @UpdateDateColumn({transformer:{
+        from:val=>new Date(val).toLocaleString(),
+        to:val=>val
+    }})
     updateAt:Date
 
-    @CreateDateColumn()
+    @CreateDateColumn({transformer:{
+        from:val=>new Date(val).toLocaleString(),
+        to:val=>val
+    }})
     createdAt:Date
 }

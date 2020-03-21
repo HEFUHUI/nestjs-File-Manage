@@ -2,31 +2,32 @@
   <v-container>
     <v-dialog persistent transition="scale-transition" max-width="1000px" v-model="visible">
       <v-card>
-        <v-card-title primary-title>
-          选择图片
-        </v-card-title>
+        <v-card-title primary-title>选择图片</v-card-title>
         <v-card-text>
+          <v-row justify="end">
+            <v-file-input show-size v-model="file" :loading="uploadFileLoading" accept="image/*" ref="file" label="图片上传">
+              <v-btn color="success" slot="append" @click="upload">上传</v-btn>
+            </v-file-input>
+          </v-row>
           <v-row v-if="multiple" justify="space-around">
             <v-col :cols="2" v-for="image in images" :key="image.id">
               <v-checkbox multiple v-model="selectds" :value="image">
-                <v-img :src="'http://'+image.url" slot="label" aspect-ratio="1.7"></v-img>
+                <v-img :src="image.url" slot="label" aspect-ratio="1.7"></v-img>
               </v-checkbox>
             </v-col>
           </v-row>
           <v-row v-else>
             <v-col v-for="image in images" :key="image.id">
-              <v-radio v-model="selectds" :value="image">
-                <v-img
-                  :src="/^(http|https)/.test(image.url) ? image.url : 'http://'+image.url"
-                  class="img-item"
-                  fit="cover"
-                ></v-img>
-              </v-radio>
+              <v-radio-group v-model="selectds" :mandatory="false">
+                <v-radio :value="image">
+                  <v-img :src="image.url" class="img-item" slot="label"></v-img>
+                </v-radio>
+              </v-radio-group>
             </v-col>
           </v-row>
           <v-pagination
             v-model="pagination.currentPage"
-            :length="(pagination.total/pagination.page_size)+1"
+            :length="Math.floor((pagination.total/pagination.page_size)+1)"
             circle
           ></v-pagination>
         </v-card-text>
@@ -36,19 +37,28 @@
         </v-card-actions>
       </v-card>
     </v-dialog>
-    <slot name="active" v-if="!value"></slot>
+    <slot name="active" v-if="!value[0]"></slot>
     <v-row :gutter="20" v-else>
       <template v-if="multiple">
-        <v-col :span="4" v-for="item in value" :key="item.id">
-          <v-img :src="/^(http|https)/.test(item.url) ? item.url : 'http://'+item.url" fit="cover"></v-img>
+        <v-col :cols="12">
+          <div
+            style="max-width:200px"
+            class="d-inline-block pa-2"
+            v-for="item in value"
+            :key="item.id"
+          >
+            <v-img :src="item.url"></v-img>
+          </div>
         </v-col>
-        <v-btn color="primary" @click="$emit('update:visible',true)">
-          <v-icon>mdi-plus</v-icon>添加图片
-        </v-btn>
+        <v-col>
+          <v-btn color="primary" @click="$emit('update:visible',true)">
+            <v-icon>mdi-plus</v-icon>添加图片
+          </v-btn>
+        </v-col>
       </template>
       <template v-else>
         <v-col>
-          <v-img :src="/^(http|https)/.test(value.url)?value.url : 'http://'+value.url" fit="cover"></v-img>
+          <v-img :src="value.url" fit="cover"></v-img>
         </v-col>
         <v-btn color="primary" @click="$emit('update:visible',true)">更改</v-btn>
       </template>
@@ -56,38 +66,42 @@
   </v-container>
 </template>
 <script>
-import hUpload from "./upload";
 export default {
   name: "selectImage",
   props: {
-    api: {
-      type: String
-    },
     value: null,
     visible: {
       type: Boolean
     },
     multiple: {
       type: Boolean,
-      default: true
+      default: false
     }
   },
   data() {
     return {
-      uploadDialog: false,
+      file:{},
+      uploadFileLoading:false,
       pagination: {
         currentPage: 1,
         total: 0,
         page_size: 12
       },
-      selectds: [],
+      selectds: this.multiple ? [] : "",
       images: []
     };
   },
   components: {
-    hUpload
   },
   methods: {
+    async upload(){
+      const formData = new FormData()
+      formData.append("file",this.file)
+      this.uploadFileLoading = true;
+      await this.$axios.post("upload-cos",formData);
+      this.fetch()
+      this.uploadFileLoading = false;
+    },
     async uploadSuccess() {
       this.fetch(this.pagination.currentPage);
     },
@@ -99,6 +113,7 @@ export default {
         this.$emit("input", this.value);
       }
       this.$emit("input", this.selectds);
+      this.$emit("enter", this.selectds);
       this.$emit("update:visible", false);
     },
     handleCurrentChange(page) {
@@ -119,10 +134,10 @@ export default {
       this.images = images.data;
     }
   },
-  mounted(){
-    this.$watch("pagination.currentPage",(val)=>{
+  mounted() {
+    this.$watch("pagination.currentPage", val => {
       this.fetch();
-    })
+    });
   },
   created() {
     this.fetch();

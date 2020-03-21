@@ -1,4 +1,8 @@
-export class PublishDto{
-    body:string
-    ex_img:string
+import { IsNotEmpty } from "class-validator"
+
+export class PublishDto {
+    @IsNotEmpty()
+    body: string
+    @IsNotEmpty()
+    ex_img: string
 }

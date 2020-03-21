@@ -1,4 +1,4 @@
-import { Entity, PrimaryGeneratedColumn, Column, JoinColumn, OneToOne, OneToMany, ManyToOne, ManyToMany, JoinTable } from "typeorm";
+import { Entity, PrimaryGeneratedColumn, Column, JoinColumn, OneToOne, OneToMany, ManyToOne, ManyToMany, JoinTable, CreateDateColumn, UpdateDateColumn } from "typeorm";
 import { ApiProperty } from "@nestjs/swagger";
 import { image } from "./image.entity";
 import { label } from "./label.entity";
@@ -17,13 +17,13 @@ export class files{
     type:string
 
     @Column({default:0,type:"bit"})
-    isDelete:string
+    isDelete:number
 
     @Column({default:"private",enum:["public","private"],type:"enum"})
     share:string
 
     @Column({type:"bigint",default:0,transformer:{to:()=>{},from:(val)=>{
-        return val/1024/1024+"M"
+        return Math.round(val/1024/1024)+"M"
     }}})
     size:number
 
@@ -77,9 +77,15 @@ export class files{
     label:label[]
 
 
-    @Column({onUpdate:"CURRENT_TIMESTAMP",default:()=>"CURRENT_TIMESTAMP",name:"update_at",type:'timestamp'})
+    @UpdateDateColumn({transformer:{
+        from:val=>new Date(val).toLocaleString(),
+        to:val=>val
+    }})
     updateAt:Date
 
-    @Column("timestamp",{default:()=>"CURRENT_TIMESTAMP",name:"created_at"})
-    createdAt:Date
+    @CreateDateColumn({transformer:{
+        from:val=>new Date(val).toLocaleString(),
+        to:val=>val
+    }})
+    createdAt:number
 }

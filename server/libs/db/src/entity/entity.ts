@@ -7,6 +7,7 @@ import { label } from "./label.entity";
 import { problem } from "./problem.entity";
 import { answer } from "./answer.entity";
 import { comment } from "./comment.entity";
+import { notice } from "./notice.entity";
 
 export default[
     userinfo,
@@ -17,5 +18,6 @@ export default[
     label,
     problem,
     answer,
-    comment
+    comment,
+    notice
 ]

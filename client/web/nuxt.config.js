@@ -1,6 +1,9 @@
 const colors = require('vuetify/es5/util/colors').default
 
 module.exports = {
+  env:{
+    BaseUrl:"http://localhost:3001"
+  },
   mode: 'universal',
   /*
   ** Headers of the page
@@ -25,12 +28,18 @@ module.exports = {
   ** Global CSS
   */
   css: [
+    'quill/dist/quill.snow.css',
+    'quill/dist/quill.bubble.css',
+    'quill/dist/quill.core.css',
+    '~static/index.css'
   ],
   /*
   ** Plugins to load before mounting the App
   */
   plugins: [
-    "~plugins/axios"
+    { src: "~plugins/axios" },
+    { src: "~plugins/vue-socket.io.js",ssr:false},
+    { src: "~plugins/vue-quill-editor.js",ssr:false },
   ],
   /*
   ** Nuxt.js dev-modules
@@ -49,12 +58,11 @@ module.exports = {
     // Doc: https://github.com/nuxt-community/dotenv-module
     '@nuxtjs/dotenv',
   ],
-  auth:{
+  auth: {
     strategies: {
       local: {
         endpoints: {
           login: { url: 'auth/login', method: 'post', propertyName: 'token' },
-          // logout: { url: 'auth/logout', method: 'get' },
           user: { url: 'auth/user', method: 'get', propertyName: 'user' }
         },
         tokenRequired: true,
@@ -67,7 +75,7 @@ module.exports = {
   ** See https://axios.nuxtjs.org/options
   */
   axios: {
-    baseURL:"http://172.16.221.1:3001"
+    baseURL:process.env.BaseUrl ||  "http://localhost:3001"
   },
   /*
   ** vuetify module configuration
@@ -97,7 +105,7 @@ module.exports = {
     /*
     ** You can extend webpack config here
     */
-    extend (config, ctx) {
+    extend(config, ctx) {
     }
   }
 }

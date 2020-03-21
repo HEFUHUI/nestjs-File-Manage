@@ -1,4 +1,4 @@
-import { Entity, PrimaryGeneratedColumn, Column, JoinColumn, ManyToOne } from "typeorm";
+import { Entity, PrimaryGeneratedColumn, Column, JoinColumn, ManyToOne, UpdateDateColumn, CreateDateColumn, OneToOne, OneToMany } from "typeorm";
 import { account } from "./account.entity";
 import { answer } from "./answer.entity";
 
@@ -10,6 +10,9 @@ export class comment{
     @Column()
     body:string
 
+    @Column({default:0,type:"bit"})
+    isDelete:number
+
     @JoinColumn()
     @ManyToOne(t=>answer,t=>t.id)    
     answer:answer
@@ -18,9 +21,20 @@ export class comment{
     @JoinColumn()
     author:account
 
-    @Column({onUpdate:"CURRENT_TIMESTAMP",default:()=>"CURRENT_TIMESTAMP",name:"update_at",type:'timestamp'})
+    @ManyToOne(t=>comment,t=>t.child,{nullable:true,onDelete:"SET NULL"})
+    @JoinColumn()
+    reply:comment
+
+    @OneToMany(t=>comment,t=>t.reply)
+    child:comment[]
+
+    @UpdateDateColumn({transformer:{
+        from:val=>new Date(val).toLocaleString(),to:val=>val
+    }})
     updateAt:Date
 
-    @Column("timestamp",{default:()=>"CURRENT_TIMESTAMP",name:"created_at"})
+    @CreateDateColumn({transformer:{
+        from:val=>new Date(val).toLocaleString(),to:val=>val
+    }})
     createdAt:Date
 }

@@ -37,7 +37,7 @@
           <el-checkbox-group v-if="multiple" v-model="selectds">
             <el-checkbox v-for="image in images" :label="image" :key="image.id">
               <el-image
-                :src="image.url | url"
+                :src="image.url"
                 class="img-item"
                 fit="cover"
                 width="100px"
@@ -48,7 +48,7 @@
           <div v-else>
             <el-radio v-for="image in images" :label="image" :key="image.id" v-model="selectds">
               <el-image
-                :src="image.url | url"
+                :src="image.url"
                 class="img-item"
                 fit="cover"
                 width="100px"
@@ -81,8 +81,8 @@
       <template v-if="multiple">
         <el-col :span="4" v-for="item in value" :key="item.id">
           <el-image
-            :preview-src-list="[/^(http|https)/.test(item.url) ? item.url : 'http://'+item.url]"
-            :src="item.url | url"
+            :preview-src-list="[item.url]"
+            :src="item.url"
             fit="cover"
             alt
           ></el-image>
@@ -94,8 +94,8 @@
       <template v-else>
         <el-col :span="4">
           <el-image
-            :preview-src-list="[/^(http|https)/.test(value.url) ? value.url : 'http://'+value.url]"
-            :src="value.url | url"
+            :preview-src-list="[value.url]"
+            :src="value.url"
             fit="cover"
             alt
           ></el-image>

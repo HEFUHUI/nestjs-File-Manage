@@ -1,9 +1,8 @@
-import { Entity, PrimaryGeneratedColumn, Column, JoinColumn, OneToOne, ManyToOne, OneToMany } from "typeorm";
+import { Entity, PrimaryGeneratedColumn, Column, JoinColumn, OneToOne, ManyToOne, OneToMany, CreateDateColumn, UpdateDateColumn } from "typeorm";
 import { department } from "./department.entity";
 import { image } from "./image.entity";
 import { ApiProperty } from "@nestjs/swagger";
 import { account } from "./account.entity";
-import { JoinAttribute } from "typeorm/query-builder/JoinAttribute";
 
 @Entity()
 export class userinfo{
@@ -11,7 +10,7 @@ export class userinfo{
     id:string
 
     @Column({default:0,type:"bit"})
-    isDelete:string
+    isDelete:number
 
     @ApiProperty()
     @Column()
@@ -58,13 +57,19 @@ export class userinfo{
     @JoinColumn({name:"department",referencedColumnName:"id"})
     department:department
 
-    @Column({onUpdate:"CURRENT_TIMESTAMP",default:()=>"CURRENT_TIMESTAMP",name:"update_at",type:'timestamp'})
+    @UpdateDateColumn({transformer:{
+        from:val=>new Date(val).toLocaleString(),
+        to:val=>val
+    }})
     updateAt:Date
 
     @OneToMany(t=>image,t=>t.author,{nullable:true})
     @JoinColumn()
     images:image[]
 
-    @Column("timestamp",{default:()=>"CURRENT_TIMESTAMP",name:"created_at"})
+    @CreateDateColumn({transformer:{
+        from:val=>new Date(val).toLocaleString(),
+        to:val=>val
+    }})
     createdAt:Date
 }

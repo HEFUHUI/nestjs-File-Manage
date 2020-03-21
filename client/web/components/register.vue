@@ -43,15 +43,6 @@ export default {
   }),
 
   methods: {
-    // validate() {
-    //   this.$refs.form.validate();
-    // },
-    // reset() {
-    //   this.$refs.form.reset();
-    // },
-    // resetValidation() {
-    //   this.$refs.form.resetValidation();
-    // }
     async sendvCode() {
       await this.$axios.get(`auth/vcode?email=${this.email}`).catch(err=>{
         console.log(err);

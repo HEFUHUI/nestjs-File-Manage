@@ -1,4 +1,4 @@
-import { Entity, PrimaryGeneratedColumn, Column, JoinColumn, ManyToOne, OneToMany, ManyToMany, JoinTable } from "typeorm";
+import { Entity, PrimaryGeneratedColumn, Column, JoinColumn, ManyToOne, OneToMany, ManyToMany, JoinTable, CreateDateColumn, UpdateDateColumn } from "typeorm";
 import { account } from "./account.entity";
 import { problem } from "./problem.entity";
 import { comment } from "./comment.entity";
@@ -8,12 +8,15 @@ export class answer{
     @PrimaryGeneratedColumn("uuid")
     id:string
 
-    @Column()
+    @Column("longtext")
     content:string
+
+    @Column({default:0,type:"bit"})
+    isDelete:number
 
     @JoinColumn()
     @OneToMany(t=>comment,t=>t.answer)
-    comment:comment
+    comment:comment[]
 
     @ManyToMany(t=>account,t=>t.supportAnswer)
     @JoinTable({
@@ -29,15 +32,21 @@ export class answer{
 
     @ManyToOne(t=>problem,t=>t.id)
     @JoinColumn()
-    proplem:string
+    proplem:problem
 
-    @ManyToOne(t=>account,t=>t.id)
+    @ManyToOne(t=>account,t=>t.id,{nullable:true})
     @JoinColumn()
     author:account
 
-    @Column({onUpdate:"CURRENT_TIMESTAMP",default:()=>"CURRENT_TIMESTAMP",name:"update_at",type:'timestamp'})
+    @UpdateDateColumn({transformer:{
+        from:val=>new Date(val).toLocaleString(),
+        to:val=>val
+    }})
     updateAt:Date
 
-    @Column("timestamp",{default:()=>"CURRENT_TIMESTAMP",name:"created_at"})
+    @CreateDateColumn({transformer:{
+        from:val=>new Date(val).toLocaleString(),
+        to:val=>val
+    }})
     createdAt:Date
 }

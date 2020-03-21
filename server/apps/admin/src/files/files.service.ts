@@ -27,7 +27,6 @@ export class FilesService extends TypeOrmCrudService<files>{
     }
     @Override("createOneBase")
     async createOne(@Req() req:any,@Body() body:DeepPartial<files>):Promise<files>{
-        console.log(body);
         if(!body.icon){
             switch(body.type){
                 case("audio/mp3"):

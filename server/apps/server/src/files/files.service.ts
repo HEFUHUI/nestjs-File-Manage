@@ -7,6 +7,12 @@ import { label } from '@libs/db/entity/label.entity';
 
 @Injectable()
 export class FilesService {
+    async getCollection(id: string,query?:{limit:20,page:1}):Promise<files[]> {
+        return (await this.connection.manager.findOne(label,id,{relations:["file"]})).file
+    }
+    async getFileItem(id: string):Promise<files> {
+        return await this.connection.manager.findOne(files,id,{relations:["desc_image"]});
+    }
     
     constructor(@InjectConnection() private readonly connection:Connection){}
     async getFiles():Promise<files[]>{

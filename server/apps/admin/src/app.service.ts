@@ -38,12 +38,8 @@ export class AppService {
   private _lock: boolean = false;
   constructor(private db: Connection) { }
   async saveImage(userid:any,file:any):Promise<image>{
-    const img = new image()
-    img.author = userid;
-    img.url = file.url;
-    img.type = file.mimetype;
-    img.alias = this.ClearSuffixName(file.originalname)
-    return this.db.manager.save(img);;
+    const img = this.db.getRepository(image)
+    return this.db.manager.save(img.create({url:file.url,type:file.mimetype,alias:file.originalname,author:userid,purpose:"file"}));
   }
 
   ClearSuffixName(name:string):string{

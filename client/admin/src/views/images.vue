@@ -26,7 +26,7 @@
             fit="cover"
           ></el-image>
           <p>图片地址:</p>
-          <el-link :underline="false" :href="item.url | url" target="_bink">{{item.url}}</el-link>
+          <el-link :underline="false" :href="item.url" target="_bink">{{item.url}}</el-link>
           <el-button size="mini" @click="copy(item.url)">copy</el-button>
           <div style="text-align: left; margin: 0">
             <p>图片别名:{{item.alias||"无"}}</p>
@@ -157,11 +157,7 @@ export default {
       this.cosImgs = (await this.$axios.get("images/cos")).data;
       this.pagination.total = this.images.total;
       this.images.data.forEach(element => {
-        this.srcList.push(
-          /^(http|https)/.test(element.url)
-            ? element.url
-            : "http://" + element.url
-        );
+        this.srcList.push(element.url);
       });
     }
   }

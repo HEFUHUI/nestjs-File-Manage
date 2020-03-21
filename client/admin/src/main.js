@@ -18,9 +18,6 @@ Vue.use(EleForm)
 Vue.filter('date', function (value) {
   return new Date(value).toLocaleString();
 })
-Vue.filter('url', function (value) {
-  return /^(http|https)/.test(value) ? value : ('http://'+value);
-})
 
 
 Vue.mixin({

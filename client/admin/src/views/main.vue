@@ -6,7 +6,7 @@
       </div>
       <div class="center">{{options.title}}</div>
       <div class="right">
-        <img :src="UserInfo.avatar.url | url" />
+        <img :src="UserInfo.avatar.url" />
         <div class="user">
           <h4>{{UserInfo.nickName}}</h4>
           <span>{{UserInfo.email}}</span>
